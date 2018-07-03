@@ -149,3 +149,6 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/java,angular,windows,intellij
+
+#Selenide logs
+build/reports
