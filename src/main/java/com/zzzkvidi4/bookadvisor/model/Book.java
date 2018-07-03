@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Book {
-    public enum Resources {OZON, CHITAI_GOROD, LITRES}
+    public enum Resource {OZON, CHITAI_GOROD, LITRES}
     private String author;
     private String title;
     private BigDecimal price;
-    private List<Pair<Resources, String>> ids = new LinkedList<>();
+    private List<Pair<Resource, String>> ids = new LinkedList<>();
 
     public String getAuthor() {
         return author;
@@ -37,11 +37,11 @@ public class Book {
         this.price = price;
     }
 
-    public List<Pair<Resources, String>> getIds() {
+    public List<Pair<Resource, String>> getIds() {
         return ids;
     }
 
-    public void addId(Resources resource, String id){
+    public void addId(Resource resource, String id){
         ids.add(Pair.of(resource, id));
     }
 }
