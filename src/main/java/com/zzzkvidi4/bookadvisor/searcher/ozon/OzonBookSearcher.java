@@ -1,6 +1,5 @@
 package com.zzzkvidi4.bookadvisor.searcher.ozon;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.zzzkvidi4.bookadvisor.model.Book;
@@ -11,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.*;
 import static com.zzzkvidi4.bookadvisor.condition.Conditions.uploaded;
@@ -55,6 +55,7 @@ public class OzonBookSearcher implements BookSearcher {
         ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);
         List<Book> bookObjList = new LinkedList<>();
         books.forEach(b -> bookObjList.add(toBook(b)));
+        close();
         return bookObjList;
     }
 
@@ -66,7 +67,7 @@ public class OzonBookSearcher implements BookSearcher {
             bookObj.setAuthor(authorBlock.getText());
         }
         bookObj.setPrice(new BigDecimal(book.attr(OZON_BOOK_PRICE_ATTRIBUTE_NAME).replace(",", ".")));
-        bookObj.addId(Book.Resources.OZON, book.attr(OZON_BOOK_ID_ATTRIBUTE_NAME));
+        bookObj.addId(Book.Resource.OZON, book.attr(OZON_BOOK_ID_ATTRIBUTE_NAME));
         return bookObj;
     }
 }
