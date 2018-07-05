@@ -22,31 +22,35 @@ import static com.codeborne.selenide.Selenide.close;
 import static com.zzzkvidi4.bookadvisor.condition.Conditions.uploaded;
 
 public class LitresBookSearcher implements BookSearcher {
+    private static final String LITRES_SEARCH_URL = "https://www.litres.ru/pages/rmd_search_arts/?q=";
+    private static final String LITRES_BOOK_LOADER_ID = "#arts_loader_bottom";
+    private static final String LITRES_BOOK_LOAD_BTN = "#arts_loader_button";
+    private static final String LITRES_SEARCH_RESULT_CONTAINER_ID = "#searchresults";
+    private static final String LITRES_SEARCH_RESULT_ELEMENT_CLASS = ".search__item";
+
     @Override
     public List<Book> getBooks(String pattern) {
-        open("https://www.litres.ru/pages/rmd_search_arts/?q=" + pattern);
+        open(LITRES_SEARCH_URL + pattern);
         List<Book> booksObjList = new LinkedList<>();
-        SelenideElement loader = $("#arts_loader_bottom");
-        SelenideElement loadMoreBtn = $("#arts_loader_button");
+        SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
+        SelenideElement loadMoreBtn = $(LITRES_BOOK_LOAD_BTN);
         while (loader.isDisplayed() || loadMoreBtn.isDisplayed()) {
             if (loader.isDisplayed()) {
                 loader.scrollTo();
             } else if (loadMoreBtn.isDisplayed()) {
                 loadMoreBtn.click();
             }
-            /*loader = $("#arts_loader_bottom");
-            loadMoreBtn = $("#arts_loader_button");*/
             loader.waitUntil(
                     uploaded(
-                            $("#searchresults").findAll(".search__item"),
-                            "#searchresults",
-                            ".search__item"
+                            $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS),
+                            LITRES_SEARCH_RESULT_CONTAINER_ID,
+                            LITRES_SEARCH_RESULT_ELEMENT_CLASS
                     ),
                     10000
             );
         }
 
-        ElementsCollection books = $("#searchresults").findAll(".search__item");
+        ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
         books.forEach(book -> booksObjList.add(toBook(book)));
 
         close();
