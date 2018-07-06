@@ -67,7 +67,9 @@ public class LitresBookSearcher implements BookSearcher {
             bookObj.setTitle(map.get("alt"));
             bookObj.setAuthor(map.get("author"));
             bookObj.setPrice(new BigDecimal(map.get("price")));
-            bookObj.addId(Book.Resource.LITRES, book.find(".art-item__name a").attr("href"));
+            String[] path = book.find(".art-item__name a").attr("href").split("~");
+            int length = path.length;
+            bookObj.addId(Book.Resource.LITRES, path[length - 3] + "~" + path[length - 2]);
         }
         catch (IOException e) {
             Logger.getLogger(getClass().getName()).warning("Error occurred while parsing litres json book object");
