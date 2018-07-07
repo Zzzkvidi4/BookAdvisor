@@ -5,10 +5,8 @@ import com.zzzkvidi4.bookadvisor.searcher.litres.LitresSearcher;
 import com.zzzkvidi4.bookadvisor.searcher.ozon.OzonBookSearcher;
 import com.zzzkvidi4.bookadvisor.searcher.ozon.OzonSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,11 +26,11 @@ public class BookSearchingController {
         this.litresSearcher = litresSearcher;
     }
 
-    @RequestMapping(path = "/books_search/{pattern}", method = RequestMethod.GET)
-    public List<Book> getBooks(@PathVariable String pattern) {
-        logger.info("Started fetching books by \"" + pattern + "\"");
-        //List<Book> books = ozonSearcher.getBooks(pattern);
-        List<Book> books = litresSearcher.getBooks(pattern);
+    @RequestMapping(path = "/books_search", method = RequestMethod.GET)
+    public List<Book> getBooks(@RequestParam(name = "query") String query) {
+        logger.info("Started fetching books by \"" + query + "\"");
+        //List<Book> books = ozonSearcher.getBooks(query);
+        List<Book> books = litresSearcher.getBooks(query);
         logger.info("Successfully fetched " + books.size() + " books.");
         return books;
     }
