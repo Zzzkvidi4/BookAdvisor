@@ -6,6 +6,13 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookReviewsComponent } from './book-reviews/book-reviews.component';
+import {MatButtonModule, MatIconModule, MatInputModule, MatPaginatorModule, MatTableModule} from "@angular/material";
+import {BookSearchService} from "./service/book-searcher/book-search.service";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {ReviewRetrieverService} from "./service/review-retriever/review-retriever.service";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {FormsModule} from "@angular/forms";
+import {CdkTableModule} from "@angular/cdk/table";
 
 
 @NgModule({
@@ -16,9 +23,21 @@ import { BookReviewsComponent } from './book-reviews/book-reviews.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
-  providers: [],
+  providers: [
+    HttpClient,
+    BookSearchService,
+    ReviewRetrieverService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

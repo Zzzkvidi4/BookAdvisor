@@ -1,3 +1,49 @@
-<p>
-  book-list works!
-</p>
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input matInput type="text" placeholder="Введите название или автора книги" [(ngModel)]="query" name="search">
+    <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="onSearch()">Найти</button>
+  <div *ngIf="!isQuering && isReady; then isReadyBlock else isQueringBlock"></div>
+  <ng-template #isQueringBlock>
+
+  </ng-template>
+  <ng-template #isReadyBlock>
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{books.indexOf(element) + 1}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="author">
+          <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.author}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"></mat-row>
+      </mat-table>
+
+      <mat-paginator #paginator
+
+        [pageSize]="10"
+                     [pageSizeOptions]="[5, 10, 20]"
+                     [showFirstLastButtons]="true"
+                     [length]="dataSource.data.length"
+      >
+      </mat-paginator>
+    </div>
+  </ng-template>
+</form>

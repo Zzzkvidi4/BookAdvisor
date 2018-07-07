@@ -1,15 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {BookSearchService} from "../service/book-searcher/book-search.service";
+import {Book} from "../model/Book";
+import {MatPaginator, MatTableDataSource} from "@angular/material";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css']
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, AfterViewInit {
 
-  constructor() { }
+  query: string = "";
+  books: Book[];
+  isQuering: boolean = false;
+  isReady: boolean = false;
+  displayedColumns = ["position", "author", "title"];
+  dataSource = new MatTableDataSource();
+
+  constructor(private bookSearchService: BookSearchService, private router: Router) { }
+
+  @ViewChild("paginator") paginator: MatPaginator;
 
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  onSearch(){
+    this.query = this.query.trim();
+    this.isQuering = true;
+    this.isReady = false;
+    if (this.query != "") {
+      this.bookSearchService.getBooks(this.query).subscribe(
+        resp => {
+          console.log(resp);
+          this.books = resp.body;
+          this.bookSearchService.setBooks(resp.body);
+          console.log(this.books);
+          this.dataSource.data = resp.body;
+          this.isQuering = false;
+          this.isReady = true;
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    }
+  }
+
+  clear(){
+    this.query = "";
+  }
+
+  onRowClick(row) {
+    console.log(row);
+    let id = this.books.indexOf(row) + 1;
+    this.router.navigate(["/reviews/" + id]);
+  }
 }
