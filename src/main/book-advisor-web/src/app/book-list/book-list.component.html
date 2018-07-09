@@ -1,14 +1,14 @@
 <form class="example-form">
   <mat-form-field class="example-full-width">
     <input matInput type="text" placeholder="Введите название или автора книги" [(ngModel)]="query" name="search">
-    <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
+    <button mat-button *ngIf="query" matSuffix mat-icon-button aria-label="Clear" (click)="clear()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
   <button mat-raised-button color="primary" (click)="onSearch()">Найти</button>
   <div *ngIf="!isQuering && isReady; then isReadyBlock else isQueringBlock"></div>
   <ng-template #isQueringBlock>
-
+    <mat-spinner></mat-spinner>
   </ng-template>
   <ng-template #isReadyBlock>
     <div class="example-container mat-elevation-z8">

@@ -7,7 +7,7 @@ import "rxjs/add/observable/of";
 @Injectable()
 export class BookSearchService {
 
-  private static books: Book[] = [];
+  static books: Book[] = [];
 
   constructor(private http: HttpClient) {
     console.log("BookSearcher created!");

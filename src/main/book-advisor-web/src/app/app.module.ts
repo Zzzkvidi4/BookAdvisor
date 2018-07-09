@@ -6,7 +6,10 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookReviewsComponent } from './book-reviews/book-reviews.component';
-import {MatButtonModule, MatIconModule, MatInputModule, MatPaginatorModule, MatTableModule} from "@angular/material";
+import {
+  MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatPaginatorModule, MatProgressSpinnerModule,
+  MatTableModule
+} from "@angular/material";
 import {BookSearchService} from "./service/book-searcher/book-search.service";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {ReviewRetrieverService} from "./service/review-retriever/review-retriever.service";
@@ -31,7 +34,10 @@ import {CdkTableModule} from "@angular/cdk/table";
     MatInputModule,
     MatIconModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCardModule,
+    CdkTableModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     HttpClient,

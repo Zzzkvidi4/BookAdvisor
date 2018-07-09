@@ -1,3 +1,15 @@
-<p>
-  book-reviews works!
-</p>
+<div *ngIf="reviews; then reviewsReadyBlock else reviewsQueringBlock"></div>
+<ng-template #reviewsReadyBlock>
+  <mat-card *ngFor="let review of reviews">
+    <mat-card-header>
+      <p>{{review.date}}</p>
+      <p>{{review.resource}}</p>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{review.text}}</p>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+<ng-template #reviewsQueringBlock>
+  <mat-spinner></mat-spinner>
+</ng-template>
