@@ -3,6 +3,7 @@ import {BookSearchService} from "../service/book-searcher/book-search.service";
 import {Book} from "../model/Book";
 import {MatPaginator, MatTableDataSource} from "@angular/material";
 import {Router} from "@angular/router";
+import {SearchResult} from "../model/SearchRequest";
 
 @Component({
   selector: 'app-book-list',
@@ -12,6 +13,8 @@ import {Router} from "@angular/router";
 export class BookListComponent implements OnInit, AfterViewInit {
 
   query: string = "";
+  useLitres: boolean = true;
+  useOzon: boolean = true;
   books: Book[];
   isQuering: boolean = false;
   isReady: boolean = false;
@@ -42,7 +45,11 @@ export class BookListComponent implements OnInit, AfterViewInit {
     this.isQuering = true;
     this.isReady = false;
     if (this.query != "") {
-      this.bookSearchService.getBooks(this.query).subscribe(
+      let queryParams = new SearchResult();
+      queryParams.selector = this.query;
+      queryParams.useLitres = this.useLitres;
+      queryParams.useOzon = this.useOzon;
+      this.bookSearchService.getBooks(queryParams).subscribe(
         resp => {
           console.log(resp);
           this.books = resp.body;
