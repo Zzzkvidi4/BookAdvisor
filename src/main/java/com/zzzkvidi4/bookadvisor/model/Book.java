@@ -1,7 +1,5 @@
 package com.zzzkvidi4.bookadvisor.model;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +40,6 @@ public class Book {
     }
 
     public void addId(Resource resource, String id){
-        ids.add(Pair.of(resource, id));
+        ids.add(new Pair<>(resource, id));
     }
 }

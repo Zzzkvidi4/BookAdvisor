@@ -1,10 +1,10 @@
 package com.zzzkvidi4.bookadvisor.searcher.litres;
 
 import com.zzzkvidi4.bookadvisor.model.Book;
+import com.zzzkvidi4.bookadvisor.model.Pair;
 import com.zzzkvidi4.bookadvisor.model.Review;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcher;
 import com.zzzkvidi4.bookadvisor.searcher.ReviewRetriever;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
