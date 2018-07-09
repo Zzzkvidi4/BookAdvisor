@@ -5,7 +5,11 @@
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="onSearch()">Найти</button>
+  <button mat-raised-button color="primary" (click)="onSearch()" [disabled]="(!useLitres && !useOzon) || (query.length == 0)">Найти</button>
+  <div>
+    <mat-checkbox [(ngModel)]="useLitres" name="litresCheckobox">Litres</mat-checkbox>
+    <mat-checkbox [(ngModel)]="useOzon" name="ozonCheckbox">Ozon</mat-checkbox>
+  </div>
   <div *ngIf="!isQuering && isReady; then isReadyBlock else isQueringBlock"></div>
   <ng-template #isQueringBlock>
     <mat-spinner></mat-spinner>
@@ -16,19 +20,19 @@
 
         <!-- Position Column -->
         <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> № </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{books.indexOf(element) + 1}} </mat-cell>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="author">
-          <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Автор </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.author}} </mat-cell>
         </ng-container>
 
         <!-- Weight Column -->
         <ng-container matColumnDef="title">
-          <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Название </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
         </ng-container>
 
