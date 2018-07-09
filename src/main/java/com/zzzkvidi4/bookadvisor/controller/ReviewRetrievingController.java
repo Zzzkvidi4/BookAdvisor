@@ -32,7 +32,7 @@ public class ReviewRetrievingController {
     public List<Review> getReviews(@RequestBody Book book){
         logger.info("Started fetching reviews about book: " + book);
         List<Review> reviews = litresSearcher.getReviews(book);
-        //List<Review> reviews = ozonSearcher.getReviews(book);
+        reviews.addAll(ozonSearcher.getReviews(book));
         logger.info("Successfully retrieved " + reviews.size() + " reviews");
         return reviews;
     }
