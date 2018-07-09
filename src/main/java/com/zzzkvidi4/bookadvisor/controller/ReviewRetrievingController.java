@@ -28,11 +28,10 @@ public class ReviewRetrievingController {
         this.litresSearcher = litresSearcher;
     }
 
-    @RequestMapping(path = "/reviews/{id}", method = RequestMethod.GET)
-    public List<Review> getReviews(@PathVariable String id){
-        logger.info("Started fetching reviews about book: " + id);
-        LitresReviewRetriever retriever = new LitresReviewRetriever();
-        List<Review> reviews = retriever.getReviews(id);
+    @RequestMapping(path = "/reviews", method = RequestMethod.POST)
+    public List<Review> getReviews(@RequestBody Book book){
+        logger.info("Started fetching reviews about book: " + book);
+        List<Review> reviews = litresSearcher.getReviews(book);
         //List<Review> reviews = ozonSearcher.getReviews(book);
         logger.info("Successfully retrieved " + reviews.size() + " reviews");
         return reviews;
