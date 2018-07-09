@@ -20,7 +20,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
 
   constructor(private bookSearchService: BookSearchService, private router: Router) { }
 
-  @ViewChild("paginator") paginator: MatPaginator;
+  //@ViewChild("paginator") paginator: MatPaginator;
 
   ngOnInit() {
     console.log("Initialized BookList");
@@ -34,7 +34,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    //this.dataSource.paginator = this.paginator;
   }
 
   onSearch(){
