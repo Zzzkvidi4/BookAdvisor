@@ -31,7 +31,7 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     let id = +this.location.snapshot.paramMap.get("id");
     this.book = this.bookSearchService.getBook(id);
-    if (this.book == undefined){
+    if (this.book == undefined || this.book == null){
       this.router.navigate(["/index"]);
     }
     console.log(id);

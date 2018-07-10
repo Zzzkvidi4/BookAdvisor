@@ -8,7 +8,7 @@ import {SearchResult} from "../../model/SearchRequest";
 @Injectable()
 export class BookSearchService {
 
-  static books: Book[] = [];
+  static books: Book[] = null;
 
   constructor(private http: HttpClient) {
     console.log("BookSearcher created!");

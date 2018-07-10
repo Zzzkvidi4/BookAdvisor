@@ -10,14 +10,14 @@
     <mat-checkbox [(ngModel)]="useLitres" name="litresCheckobox">Litres</mat-checkbox>
     <mat-checkbox [(ngModel)]="useOzon" name="ozonCheckbox">Ozon</mat-checkbox>
   </div>
-  <div *ngIf="!isQuering && isReady; then isReadyBlock else isQueringBlock"></div>
+  <div *ngIf="isQuering && !isReady; then isQueringBlock else isReadyBlock"></div>
   <ng-template #isQueringBlock>
     <mat-spinner></mat-spinner>
   </ng-template>
   <ng-template #isReadyBlock>
-    <div *ngIf="isError; then retrievedSuccessfully else retrievedWithError"></div>
+    <div *ngIf="!isError; then retrievedSuccessfully else retrievedWithError"></div>
     <ng-template #retrievedSuccessfully>
-      <div class="example-container mat-elevation-z8">
+      <div *ngIf="isReady" class="example-container mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource">
 
         <!-- Position Column -->
