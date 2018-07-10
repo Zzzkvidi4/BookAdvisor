@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcher;
+import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ public class LitresBookSearcher implements BookSearcher {
 
     @Override
     public List<Book> getBooks(String pattern) {
+        WebDriverConfigurator.setUpFirefoxHeadless();
         open(LITRES_SEARCH_URL + pattern);
         List<Book> booksObjList = new LinkedList<>();
         SelenideElement loader = $(LITRES_BOOK_LOADER_ID);

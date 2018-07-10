@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcher;
+import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -29,6 +30,7 @@ public class OzonBookSearcher implements BookSearcher {
     private static final String OZON_BOOK_ID_ATTRIBUTE_NAME = "data-itemid";
 
     public List<Book> getBooks(String pattern) {
+        WebDriverConfigurator.setUpFirefoxHeadless();
         open(OZON_SEARCH_URL + pattern);
         int pages;
         try {

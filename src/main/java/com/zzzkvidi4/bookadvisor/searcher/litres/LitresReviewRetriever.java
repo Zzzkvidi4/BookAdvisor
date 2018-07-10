@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.model.Review;
 import com.zzzkvidi4.bookadvisor.searcher.ReviewRetriever;
+import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class LitresReviewRetriever implements ReviewRetriever {
 
     @Override
     public List<Review> getReviews(String id) {
+        WebDriverConfigurator.setUpFirefoxHeadless();
         String[] path = id.split(LITRES_BOOK_ID_DELIMITER);
         open(LITRES_DETAIL_URL + path[0] + "/" + path[1] + "/" + "#recenses");
         List<Review> reviewsObjList = new LinkedList<>();

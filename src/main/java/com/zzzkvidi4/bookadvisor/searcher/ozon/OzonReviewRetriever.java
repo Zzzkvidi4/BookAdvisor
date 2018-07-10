@@ -7,6 +7,7 @@ import com.zzzkvidi4.bookadvisor.condition.Conditions;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.model.Review;
 import com.zzzkvidi4.bookadvisor.searcher.ReviewRetriever;
+import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Date;
@@ -30,6 +31,7 @@ public class OzonReviewRetriever implements ReviewRetriever {
 
     @Override
     public List<Review> getReviews(String id) {
+        WebDriverConfigurator.setUpFirefoxHeadless();
         List<Review> reviewsObjList = new LinkedList<>();
         open(OZON_DETAIL_URL + id + "/");
         SelenideElement reviewsBtn = $(OZON_REVIEWS_BTN_CSS_CLASS);
