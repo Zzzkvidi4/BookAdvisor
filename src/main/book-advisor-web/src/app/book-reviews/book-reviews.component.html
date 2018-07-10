@@ -11,5 +11,17 @@
   </mat-card>
 </ng-template>
 <ng-template #reviewsQueringBlock>
-  <mat-spinner></mat-spinner>
+  <div *ngIf="isError; then isRetrievingBlock else isErrorBlock"></div>
+  <ng-template #isRetrievingBlock>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+
+  <ng-template #isErrorBlock>
+    <mat-card>
+      <mat-card-title>Ops, something went wrong!</mat-card-title>
+      <mat-card-content>
+        Please, contact with our administrator!
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
 </ng-template>

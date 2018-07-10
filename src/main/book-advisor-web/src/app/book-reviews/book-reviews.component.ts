@@ -19,6 +19,7 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
   book: Book;
   reviews: Review[] = null;
   dataSource = new MatTableDataSource();
+  isError: boolean = false;
 
   constructor(
     private bookSearchService: BookSearchService,
@@ -40,9 +41,11 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
         console.log(resp);
         this.reviews = resp.body;
         this.dataSource.data = this.reviews;
+        this.isError = false;
       },
       error => {
         console.log(error);
+        this.isError = true;
       }
     )
   }

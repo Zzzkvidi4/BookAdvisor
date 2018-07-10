@@ -15,7 +15,9 @@
     <mat-spinner></mat-spinner>
   </ng-template>
   <ng-template #isReadyBlock>
-    <div class="example-container mat-elevation-z8">
+    <div *ngIf="isError; then retrievedSuccessfully else retrievedWithError"></div>
+    <ng-template #retrievedSuccessfully>
+      <div class="example-container mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource">
 
         <!-- Position Column -->
@@ -49,5 +51,14 @@
       >
       </mat-paginator>-->
     </div>
+    </ng-template>
+    <ng-template #retrievedWithError>
+      <mat-card>
+        <mat-card-title>Ops, something went wrong!</mat-card-title>
+        <mat-card-content>
+          Please, contact with our administrator!
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
   </ng-template>
 </form>

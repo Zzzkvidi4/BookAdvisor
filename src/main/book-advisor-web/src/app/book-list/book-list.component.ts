@@ -18,6 +18,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
   books: Book[];
   isQuering: boolean = false;
   isReady: boolean = false;
+  isError: boolean = false;
   displayedColumns = ["position", "author", "title"];
   dataSource = new MatTableDataSource();
 
@@ -58,9 +59,13 @@ export class BookListComponent implements OnInit, AfterViewInit {
           this.dataSource.data = resp.body;
           this.isQuering = false;
           this.isReady = true;
+          this.isError = false;
         },
         error => {
           console.log(error);
+          this.isQuering = false;
+          this.isReady = true;
+          this.isError = true;
         }
       )
     }
