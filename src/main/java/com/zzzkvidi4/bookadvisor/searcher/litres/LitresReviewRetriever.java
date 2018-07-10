@@ -8,6 +8,7 @@ import com.zzzkvidi4.bookadvisor.model.Review;
 import com.zzzkvidi4.bookadvisor.searcher.ReviewRetriever;
 import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -17,6 +18,10 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.close;
 
 public class LitresReviewRetriever implements ReviewRetriever {
+    private static final List<String> LITRES_MONTH_NAMES = Arrays.asList(
+            "января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+            "августа", "сентября", "октября", "ноября", "декабря"
+    );
     private static final String LITRES_DETAIL_URL = "https://www.litres.ru/";
     private static final String LITRES_REVIEWS_LINK_ID = "#book_reviews_link";
     private static final String LITRES_REVIEWS_COUNT_CLASS = ".counts";
@@ -59,9 +64,14 @@ public class LitresReviewRetriever implements ReviewRetriever {
 
     private Review toReview(SelenideElement review){
         Review reviewObj = new Review();
-        reviewObj.setDate(review.find(LITRES_REVIEW_DATE_CLASS).getText());
+        reviewObj.setDate(toDate(review.find(LITRES_REVIEW_DATE_CLASS).getText()));
         reviewObj.setResource(Book.Resource.LITRES);
         reviewObj.setText(review.find(LITRES_REVIEW_TEXT_CLASS).getText());
         return reviewObj;
+    }
+
+    private String toDate(String litresDate){
+        String[] parts = litresDate.split(",");
+        return parts[0];
     }
 }
