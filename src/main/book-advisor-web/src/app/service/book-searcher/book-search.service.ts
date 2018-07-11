@@ -3,7 +3,7 @@ import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Book} from "../../model/Book";
 import "rxjs/add/observable/of";
-import {SearchResult} from "../../model/SearchRequest";
+import {SearchQuery} from "../../model/SearchQuery";
 
 @Injectable()
 export class BookSearchService {
@@ -14,7 +14,7 @@ export class BookSearchService {
     console.log("BookSearcher created!");
   }
 
-  getBooks(query: SearchResult): Observable<HttpResponse<Book[]>> {
+  getBooks(query: SearchQuery): Observable<HttpResponse<Book[]>> {
     let response = this.http.post<Book[]>(
       "http://localhost:8080/books",
       query,

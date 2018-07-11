@@ -395,7 +395,7 @@ var BookListComponentNgFactory = __WEBPACK_IMPORTED_MODULE_1__angular_core__["_1
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__service_book_searcher_book_search_service__ = __webpack_require__("../../../../../src/app/service/book-searcher/book-search.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__model_SearchRequest__ = __webpack_require__("../../../../../src/app/model/SearchRequest.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__model_SearchQuery__ = __webpack_require__("../../../../../src/app/model/SearchQuery.ts");
 
 
 
@@ -433,10 +433,12 @@ var BookListComponent = /** @class */ (function () {
         this.isQuering = true;
         this.isReady = false;
         if (this.query != "") {
-            var queryParams = new __WEBPACK_IMPORTED_MODULE_3__model_SearchRequest__["a" /* SearchResult */]();
+            var queryParams = new __WEBPACK_IMPORTED_MODULE_3__model_SearchQuery__["a" /* SearchQuery */]();
             queryParams.selector = this.query;
-            queryParams.useLitres = this.useLitres;
-            queryParams.useOzon = this.useOzon;
+            if (this.useLitres)
+                queryParams.resources.push("LITRES");
+            if (this.useOzon)
+                queryParams.resources.push("OZON");
             this.bookSearchService.getBooks(queryParams).subscribe(function (resp) {
                 console.log(resp);
                 _this.books = resp.body;
@@ -593,15 +595,16 @@ var BookReviewsComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/model/SearchRequest.ts":
+/***/ "../../../../../src/app/model/SearchQuery.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SearchResult; });
-var SearchResult = /** @class */ (function () {
-    function SearchResult() {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SearchQuery; });
+var SearchQuery = /** @class */ (function () {
+    function SearchQuery() {
+        this.resources = [];
     }
-    return SearchResult;
+    return SearchQuery;
 }());
 
 
@@ -623,7 +626,7 @@ var BookSearchService = /** @class */ (function () {
         console.log("BookSearcher created!");
     }
     BookSearchService.prototype.getBooks = function (query) {
-        var response = this.http.post("http://localhost:8080/books_search", query, { withCredentials: true, observe: "response" });
+        var response = this.http.post("http://localhost:8080/books", query, { withCredentials: true, observe: "response" });
         return response;
     };
     BookSearchService.prototype.setBooks = function (books) {

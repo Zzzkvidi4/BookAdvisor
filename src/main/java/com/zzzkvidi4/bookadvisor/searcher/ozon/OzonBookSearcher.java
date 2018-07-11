@@ -5,8 +5,10 @@ import com.codeborne.selenide.SelenideElement;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcher;
 import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +18,8 @@ import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.*;
 import static com.zzzkvidi4.bookadvisor.condition.Conditions.uploaded;
 
-public class OzonBookSearcher implements BookSearcher {
+@Component("ozonBookSearcher")
+public class OzonBookSearcher extends BookSearcher {
     private static final String OZON_SEARCH_URL = "https://www.ozon.ru/?context=search&group=div_book&text=";
 
     private static final String OZON_FOOTER_CSS_CLASS = ".ePage_Footer";
@@ -29,8 +32,8 @@ public class OzonBookSearcher implements BookSearcher {
     private static final String OZON_BOOK_PRICE_ATTRIBUTE_NAME = "data-price";
     private static final String OZON_BOOK_ID_ATTRIBUTE_NAME = "data-itemid";
 
-    public List<Book> getBooks(String pattern) {
-        WebDriverConfigurator.setUpFirefoxHeadless();
+    public void getBooks(String pattern, HashMap<String, Book> storage) {
+        //WebDriverConfigurator.setUpFirefoxHeadless();
         open(OZON_SEARCH_URL + pattern);
         int pages;
         try {
@@ -55,10 +58,8 @@ public class OzonBookSearcher implements BookSearcher {
             }
         }
         ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);
-        List<Book> bookObjList = new LinkedList<>();
-        books.forEach(b -> bookObjList.add(toBook(b)));
+        books.forEach(b -> pushBook(toBook(b), storage));
         close();
-        return bookObjList;
     }
 
     private Book toBook(SelenideElement book){

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcher;
 import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,7 +23,8 @@ import static com.codeborne.selenide.Selenide.close;
 
 import static com.zzzkvidi4.bookadvisor.condition.Conditions.uploaded;
 
-public class LitresBookSearcher implements BookSearcher {
+@Component("litresBookSearcher")
+public class LitresBookSearcher extends BookSearcher {
     private static final String LITRES_SEARCH_URL = "https://www.litres.ru/pages/rmd_search_arts/?q=";
     private static final String LITRES_BOOK_LOADER_ID = "#arts_loader_bottom";
     private static final String LITRES_BOOK_LOAD_BTN = "#arts_loader_button";
@@ -30,10 +32,9 @@ public class LitresBookSearcher implements BookSearcher {
     private static final String LITRES_SEARCH_RESULT_ELEMENT_CLASS = ".search__item";
 
     @Override
-    public List<Book> getBooks(String pattern) {
-        WebDriverConfigurator.setUpFirefoxHeadless();
+    public void getBooks(String pattern, HashMap<String, Book> storage) {
+        //WebDriverConfigurator.setUpFirefoxHeadless();
         open(LITRES_SEARCH_URL + pattern);
-        List<Book> booksObjList = new LinkedList<>();
         SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
         SelenideElement loadMoreBtn = $(LITRES_BOOK_LOAD_BTN);
         while (loader.isDisplayed() || loadMoreBtn.isDisplayed()) {
@@ -53,10 +54,8 @@ public class LitresBookSearcher implements BookSearcher {
         }
 
         ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
-        books.forEach(book -> booksObjList.add(toBook(book)));
-
+        books.forEach(book -> pushBook(toBook(book), storage));
         close();
-        return booksObjList;
     }
 
     private Book toBook(SelenideElement book){
