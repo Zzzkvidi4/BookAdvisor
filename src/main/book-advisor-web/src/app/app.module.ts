@@ -40,6 +40,7 @@ import {CdkTableModule} from "@angular/cdk/table";
     CdkTableModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    MatButtonModule,
   ],
   providers: [
     HttpClient,

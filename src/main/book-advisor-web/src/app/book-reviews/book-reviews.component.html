@@ -2,8 +2,7 @@
 <ng-template #reviewsReadyBlock>
   <mat-card *ngFor="let review of reviews">
     <mat-card-header>
-      <p>{{review.date}}</p>
-      <p>{{review.resource}}</p>
+      <p>{{review.date}} from {{review.resource}}</p>
     </mat-card-header>
     <mat-card-content>
       <p>{{review.text}}</p>
@@ -11,5 +10,17 @@
   </mat-card>
 </ng-template>
 <ng-template #reviewsQueringBlock>
-  <mat-spinner></mat-spinner>
+  <div *ngIf="!isError; then isRetrievingBlock else isErrorBlock"></div>
+  <ng-template #isRetrievingBlock>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+
+  <ng-template #isErrorBlock>
+    <mat-card>
+      <mat-card-title>Ops, something went wrong!</mat-card-title>
+      <mat-card-content>
+        Please, contact with our administrator!
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
 </ng-template>

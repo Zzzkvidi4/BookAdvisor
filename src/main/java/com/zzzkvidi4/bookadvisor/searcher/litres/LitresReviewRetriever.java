@@ -35,7 +35,7 @@ public class LitresReviewRetriever implements ReviewRetriever {
 
     @Override
     public List<Review> getReviews(String id) {
-        WebDriverConfigurator.setUpFirefoxHeadless();
+        //WebDriverConfigurator.setUpFirefoxHeadless();
         String[] path = id.split(LITRES_BOOK_ID_DELIMITER);
         open(LITRES_DETAIL_URL + path[0] + "/" + path[1] + "/" + "#recenses");
         List<Review> reviewsObjList = new LinkedList<>();

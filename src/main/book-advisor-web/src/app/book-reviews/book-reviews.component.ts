@@ -19,6 +19,7 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
   book: Book;
   reviews: Review[] = null;
   dataSource = new MatTableDataSource();
+  isError: boolean = false;
 
   constructor(
     private bookSearchService: BookSearchService,
@@ -30,7 +31,7 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     let id = +this.location.snapshot.paramMap.get("id");
     this.book = this.bookSearchService.getBook(id);
-    if (this.book == undefined){
+    if (this.book == undefined || this.book == null){
       this.router.navigate(["/index"]);
     }
     console.log(id);
@@ -40,9 +41,11 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
         console.log(resp);
         this.reviews = resp.body;
         this.dataSource.data = this.reviews;
+        this.isError = false;
       },
       error => {
         console.log(error);
+        this.isError = true;
       }
     )
   }

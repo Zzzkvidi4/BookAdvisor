@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Book {
-    public enum Resource {OZON, CHITAI_GOROD, LITRES}
+    public enum Resource {OZON, LITRES}
     private String author;
     private String title;
     private BigDecimal price;

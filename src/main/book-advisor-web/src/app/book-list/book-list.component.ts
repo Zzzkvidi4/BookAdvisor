@@ -3,7 +3,7 @@ import {BookSearchService} from "../service/book-searcher/book-search.service";
 import {Book} from "../model/Book";
 import {MatPaginator, MatTableDataSource} from "@angular/material";
 import {Router} from "@angular/router";
-import {SearchResult} from "../model/SearchRequest";
+import {SearchQuery} from "../model/SearchQuery";
 
 @Component({
   selector: 'app-book-list',
@@ -18,6 +18,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
   books: Book[];
   isQuering: boolean = false;
   isReady: boolean = false;
+  isError: boolean = false;
   displayedColumns = ["position", "author", "title"];
   dataSource = new MatTableDataSource();
 
@@ -45,10 +46,10 @@ export class BookListComponent implements OnInit, AfterViewInit {
     this.isQuering = true;
     this.isReady = false;
     if (this.query != "") {
-      let queryParams = new SearchResult();
+      let queryParams = new SearchQuery();
       queryParams.selector = this.query;
-      queryParams.useLitres = this.useLitres;
-      queryParams.useOzon = this.useOzon;
+      if (this.useLitres) queryParams.resources.push("LITRES");
+      if (this.useOzon) queryParams.resources.push("OZON");
       this.bookSearchService.getBooks(queryParams).subscribe(
         resp => {
           console.log(resp);
@@ -58,9 +59,13 @@ export class BookListComponent implements OnInit, AfterViewInit {
           this.dataSource.data = resp.body;
           this.isQuering = false;
           this.isReady = true;
+          this.isError = false;
         },
         error => {
           console.log(error);
+          this.isQuering = false;
+          this.isReady = true;
+          this.isError = true;
         }
       )
     }
