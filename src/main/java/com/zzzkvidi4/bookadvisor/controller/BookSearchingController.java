@@ -27,7 +27,7 @@ public class BookSearchingController {
         this.litresSearcher = litresSearcher;
     }
 
-    @RequestMapping(path = "/books_search", method = RequestMethod.POST)
+    @RequestMapping(path = "/books", method = RequestMethod.POST)
     public Collection<Book> getBooks(@RequestBody SearchResult searchResult) {
         logger.info("Started fetching books by \"" + searchResult + "\"");
         List<Book> books = new LinkedList<>();

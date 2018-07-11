@@ -16,7 +16,7 @@ export class BookSearchService {
 
   getBooks(query: SearchResult): Observable<HttpResponse<Book[]>> {
     let response = this.http.post<Book[]>(
-      "http://localhost:8080/books_search",
+      "http://localhost:8080/books",
       query,
       {withCredentials: true, observe: "response"}
     );
