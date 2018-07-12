@@ -3,6 +3,7 @@ package com.zzzkvidi4.bookadvisor.dbservice;
 import com.zzzkvidi4.bookadvisor.model.db.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ public class UserService {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<User> getUsers(){
         return sessionFactory.getCurrentSession().createQuery("from User", User.class).list();
     }
@@ -31,5 +32,10 @@ public class UserService {
                 .createQuery("from User u where u.username = :login", User.class)
                 .setParameter("login", login)
                 .getSingleResult();
+    }
+
+    public void createUser(User user){
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        sessionFactory.getCurrentSession().save(user);
     }
 }
