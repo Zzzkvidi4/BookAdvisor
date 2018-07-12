@@ -10,7 +10,7 @@ public class Book {
     @Column(name = "book_id")
     private int bookId;
 
-    @Column(name = "selector")
+    @Column(name = "selector", unique = true)
     private String selector;
 
     public int getBookId() {
