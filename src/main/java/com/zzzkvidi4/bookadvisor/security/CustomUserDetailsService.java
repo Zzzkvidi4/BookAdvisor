@@ -20,6 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         com.zzzkvidi4.bookadvisor.model.db.User user = userService.getUserByLogin(s);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found!");
+        }
         User.UserBuilder builder = User.builder();
         builder.username(user.getUsername());
         builder.password(user.getPassword());
