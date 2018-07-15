@@ -1,4 +1,7 @@
 <nav>
   <button routerLink="/index" mat-raised-button>BookAdvisor</button>
+  <button *ngIf="!isAuthorized" routerLink="/accounts" mat-raised-button>Регистрация/Авторизация</button>
+  <button *ngIf="isAuthorized" routerLink="/users/{{userId}}">{{username}}</button>
+  <button *ngIf="isAuthorized" (click)="logout()">Выйти</button>
 </nav>
 <router-outlet></router-outlet>
