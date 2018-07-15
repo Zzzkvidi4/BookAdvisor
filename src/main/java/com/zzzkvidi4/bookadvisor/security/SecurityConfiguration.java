@@ -8,14 +8,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService userDetailsService;
-    private CustomAuthenticationFilter authenticationFilter;
     private PasswordEncoder encoder;
+    private AuthenticationSuccessHandler successHandler;
 
     @Autowired
     public void setUserDetailsService(CustomUserDetailsService userDetailsService) {
@@ -23,20 +24,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setAuthenticationFilter(CustomAuthenticationFilter authenticationFilter){
-        this.authenticationFilter = authenticationFilter;
-    }
-
-    @Autowired
     public void setEncoder(PasswordEncoder encoder){
         this.encoder = encoder;
     }
 
-    @Bean
-    public CustomAuthenticationFilter autheticationFilter() throws Exception {
+    public CustomAuthenticationFilter authenticationFilter() throws Exception {
         CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(successHandler);
         return filter;
+    }
+
+    @Autowired
+    public void setSuccessHandler(AuthenticationSuccessHandler successHandler){
+        this.successHandler = successHandler;
     }
 
     @Override
@@ -46,10 +47,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.authorizeRequests().antMatchers("/books/**", "/reviews/**").permitAll();
-        http.authorizeRequests().antMatchers("/favourites/**").hasAnyRole("USER");
-        http.logout();
         http.csrf().disable();
+        http.authorizeRequests().antMatchers("/books/**", "/reviews/**", "/users").permitAll();
+        http.authorizeRequests().antMatchers("/users/**").hasAnyRole("USER");
+        http.exceptionHandling().authenticationEntryPoint(new RESTAuthenticationEntryPoint());
+        http.formLogin().successHandler(successHandler);
+        http.formLogin().failureHandler(new RESTAuthenticationFailureHandler());
+        http.logout();
+        http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
