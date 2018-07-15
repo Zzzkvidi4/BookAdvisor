@@ -7,7 +7,8 @@ CREATE UNIQUE INDEX username_index ON users(username);
 
 CREATE TABLE books(
   book_id INT AUTO_INCREMENT PRIMARY KEY,
-  selector VARCHAR(60) NOT NULL UNIQUE
+  author VARCHAR(40) NOT NULL,
+  title VARCHAR(60) NOT NULL
 );
 CREATE UNIQUE INDEX selector_index ON books(selector);
 
