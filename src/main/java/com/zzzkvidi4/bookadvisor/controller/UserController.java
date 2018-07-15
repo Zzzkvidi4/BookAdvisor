@@ -2,11 +2,11 @@ package com.zzzkvidi4.bookadvisor.controller;
 
 import com.zzzkvidi4.bookadvisor.dbservice.UserService;
 import com.zzzkvidi4.bookadvisor.model.db.User;
+import com.zzzkvidi4.bookadvisor.response.ResponseContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +25,30 @@ public class UserController {
     }
 
     @RequestMapping(path = "/users", method = RequestMethod.POST)
-    public void createUser(@RequestBody User user){
-        userService.createUser(user);
+    public ResponseContainer<Boolean> createUser(@RequestBody User user){
+        ResponseContainer<Boolean> response = new ResponseContainer<>();
+        response.setData(userService.createUser(user));
+        return response;
+    }
+
+    @RequestMapping(path = "/users/check-login", method = RequestMethod.GET)
+    public ResponseContainer<Boolean> checkLoginUnique(@RequestParam("login") String login){
+        ResponseContainer<Boolean> response = new ResponseContainer<>();
+        response.setData(userService.getUserByLogin(login) == null);
+        return response;
+    }
+
+    @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
+    public ResponseContainer<User> getUserById(@PathVariable int id){
+        User user = userService.getUserById(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ResponseContainer<User> response = new ResponseContainer<>();
+        response.setAuthenticated(auth.isAuthenticated());
+        if ((user != null) && (!user.getUsername().equals(auth.getName()))){
+            response.setData(null);
+        } else {
+            response.setData(user);
+        }
+        return response;
     }
 }
