@@ -46,8 +46,27 @@ public class UserService {
         }
     }
 
-    public void createUser(User user){
-        user.setPassword(encoder.encode(user.getPassword()));
-        sessionFactory.getCurrentSession().save(user);
+    public boolean createUser(User user){
+        try {
+            user.setPassword(encoder.encode(user.getPassword()));
+            sessionFactory.getCurrentSession().save(user);
+            return true;
+        }
+        catch(Throwable t) {
+            return false;
+        }
+    }
+
+    public User getUserById(int id){
+        try {
+            return sessionFactory
+                    .getCurrentSession()
+                    .createQuery("from User u left join fetch BookUser bu left join fetch Book b where u.id = :id", User.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        }
+        catch(Throwable t){
+            return null;
+        }
     }
 }
