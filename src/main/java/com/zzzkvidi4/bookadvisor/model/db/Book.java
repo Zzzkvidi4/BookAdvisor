@@ -10,18 +10,29 @@ public class Book {
     @Column(name = "book_id")
     private int bookId;
 
-    @Column(name = "selector", unique = true)
-    private String selector;
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "title")
+    private String title;
 
     public int getBookId() {
         return bookId;
     }
 
-    public String getSelector() {
-        return selector;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setSelector(String selector) {
-        this.selector = selector;
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
