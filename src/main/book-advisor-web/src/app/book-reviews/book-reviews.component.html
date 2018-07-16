@@ -1,11 +1,20 @@
 <div *ngIf="reviews; then reviewsReadyBlock else reviewsQueringBlock"></div>
 <ng-template #reviewsReadyBlock>
-  <mat-card *ngFor="let review of reviews">
+  <mat-card>
     <mat-card-header>
-      <p>{{review.date}} from {{review.resource}}</p>
+      <p>{{book.author}} {{book.title}}</p>
+      <button *ngIf="!isInFavourite" mat-raised-button (click)="addToFavourite()">В избранное</button>
+      <button *ngIf="isInFavourite" mat-raised-button disabled>В избранном</button>
     </mat-card-header>
     <mat-card-content>
-      <p>{{review.text}}</p>
+      <mat-card *ngFor="let review of reviews">
+        <mat-card-header>
+          <p>{{review.date}} from {{review.resource}}</p>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{review.text}}</p>
+        </mat-card-content>
+      </mat-card>
     </mat-card-content>
   </mat-card>
 </ng-template>

@@ -31,7 +31,7 @@ public class OzonReviewRetriever implements ReviewRetriever {
 
     @Override
     public List<Review> getReviews(String id) {
-        //WebDriverConfigurator.setUpFirefoxHeadless();
+        WebDriverConfigurator.setUpFirefoxHeadless();
         List<Review> reviewsObjList = new LinkedList<>();
         open(OZON_DETAIL_URL + id + "/");
         SelenideElement reviewsBtn = $(OZON_REVIEWS_BTN_CSS_CLASS);

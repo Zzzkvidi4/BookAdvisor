@@ -33,7 +33,7 @@ public class LitresBookSearcher extends BookSearcher {
 
     @Override
     public void getBooks(String pattern, HashMap<String, Book> storage) {
-        //WebDriverConfigurator.setUpFirefoxHeadless();
+        WebDriverConfigurator.setUpFirefoxHeadless();
         open(LITRES_SEARCH_URL + pattern);
         SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
         SelenideElement loadMoreBtn = $(LITRES_BOOK_LOAD_BTN);
