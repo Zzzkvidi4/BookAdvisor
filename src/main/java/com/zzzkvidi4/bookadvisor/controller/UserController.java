@@ -1,6 +1,7 @@
 package com.zzzkvidi4.bookadvisor.controller;
 
 import com.zzzkvidi4.bookadvisor.dbservice.UserService;
+import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.model.db.User;
 import com.zzzkvidi4.bookadvisor.response.ResponseContainer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,33 @@ public class UserController {
             response.setData(user);
         }
         return response;
+    }
+
+    @RequestMapping(path = "/users/{id}/favourites", method = RequestMethod.POST)
+    public ResponseContainer<Boolean> addToFavourite(@PathVariable int id, @RequestBody Book book){
+        ResponseContainer<Boolean> response = new ResponseContainer<>();
+        response.setAuthenticated(true);
+        response.setData(isCurrentUser(id));
+        if (response.getData()) {
+            userService.addToFavourites(id, book);
+        }
+        return response;
+    }
+
+    @RequestMapping(path = "/users/{id}/favourites/is-in", method = RequestMethod.POST)
+    public ResponseContainer<Boolean> isInFavourite(@PathVariable int id, @RequestBody Book book){
+        ResponseContainer<Boolean> response = new ResponseContainer<>();
+        response.setAuthenticated(true);
+        response.setData(isCurrentUser(id));
+        if (response.getData()) {
+            response.setData(userService.isInFavourite(id, book));
+        }
+        return response;
+    }
+
+    private boolean isCurrentUser(int id){
+        User user = userService.getUserById(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return user != null && user.getUsername().equals(auth.getName());
     }
 }
