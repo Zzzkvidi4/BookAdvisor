@@ -1,5 +1,8 @@
 package com.zzzkvidi4.bookadvisor.model.db;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +23,16 @@ public class User {
 
     @OneToMany
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonProperty("books")
     private Set<BookUser> bookUser = new HashSet<>();
+
+    public User(){}
+
+    public User(int id, String username, String password){
+        this.userId = id;
+        this.username = username;
+        this.password = password;
+    }
 
     public int getUserId() {
         return userId;
