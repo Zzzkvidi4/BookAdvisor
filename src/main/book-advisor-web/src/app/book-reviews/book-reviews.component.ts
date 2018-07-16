@@ -68,6 +68,7 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
     if (!this.isAuthenticated) {
       this.router.navigate(["/accounts"]);
     } else {
+      this.book.selector = BookSearchService.selector;
       this.userService.addToFavourite(LoginService.userId, this.book).subscribe(
         resp => {
           this.isInFavourite = resp.body.data;

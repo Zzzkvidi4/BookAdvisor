@@ -55,6 +55,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
           console.log(resp);
           this.books = resp.body;
           this.bookSearchService.setBooks(resp.body);
+          BookSearchService.selector = this.query;
           console.log(this.books);
           this.dataSource.data = resp.body;
           this.isQuering = false;
