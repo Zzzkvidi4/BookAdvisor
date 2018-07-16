@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {LoginInfo} from "../../model/LoginInfo";
@@ -10,11 +10,12 @@ export class LoginService {
   public static isAuthorized: boolean = false;
   public static userId: number;
   public static username: string;
+  @Output() static logged = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient) { }
 
-  login(loginInfo: LoginInfo): Observable<HttpResponse<User>> {
-    return this.http.post<any>("http://localhost:8080/login", loginInfo, {observe: "response", withCredentials: true});
+  login(loginInfo: LoginInfo): Observable<HttpResponse<ResponseContainer<User>>> {
+    return this.http.post<ResponseContainer<User>>("http://localhost:8080/login", loginInfo, {observe: "response", withCredentials: true});
   }
 
   logout(): Observable<HttpResponse<any>> {

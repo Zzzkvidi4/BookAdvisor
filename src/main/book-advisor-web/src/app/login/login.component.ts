@@ -88,8 +88,10 @@ export class LoginComponent implements OnInit {
         this.wrongCredentials = false;
         console.log(resp);
         LoginService.isAuthorized = true;
-        LoginService.userId = resp.body.userId;
-        LoginService.username = resp.body.username;
+        LoginService.userId = resp.body.data.userId;
+        LoginService.username = resp.body.data.username;
+        LoginService.logged.emit(true);
+        console.log(LoginService.username);
         this.router.navigate(["index"]);
       },
       error => {
