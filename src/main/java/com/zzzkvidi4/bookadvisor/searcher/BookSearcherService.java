@@ -27,7 +27,7 @@ public class BookSearcherService {
     }
 
     public Collection<Book> getBooks(SearchQuery query){
-        WebDriverConfigurator.setUpFirefoxHeadless();
+        //WebDriverConfigurator.setUpFirefoxHeadless();
         HashMap<String, Book> storage = new LinkedHashMap<>();
         for(Book.Resource resource: query.getResources()){
             factory.get(resource).getBooks(query.getSelector(), storage);
