@@ -1,5 +1,7 @@
 package com.zzzkvidi4.bookadvisor.dbservice;
 
+import com.zzzkvidi4.bookadvisor.model.Book;
+import com.zzzkvidi4.bookadvisor.model.db.BookUser;
 import com.zzzkvidi4.bookadvisor.model.db.User;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class UserService {
         try {
             return sessionFactory
                     .getCurrentSession()
-                    .createQuery("from User u where u.username = :login", User.class)
+                    .createQuery("select new User(u.id, u.username, u.password) from User u where u.username = :login", User.class)
                     .setParameter("login", login)
                     .getSingleResult();
         }
@@ -61,12 +63,50 @@ public class UserService {
         try {
             return sessionFactory
                     .getCurrentSession()
-                    .createQuery("from User u left join fetch BookUser bu left join fetch Book b where u.id = :id", User.class)
+                    .createQuery("from User u left outer join fetch u.bookUser bu left outer join fetch bu.book where u.id = :id", User.class)
                     .setParameter("id", id)
                     .getSingleResult();
         }
         catch(Throwable t){
             return null;
         }
+    }
+
+    public void addToFavourites(int id, Book book){
+        com.zzzkvidi4.bookadvisor.model.db.Book dbBook;
+        try {
+            dbBook = sessionFactory
+                    .getCurrentSession()
+                    .createQuery("from Book b where b.author = :author and b.title = :title", com.zzzkvidi4.bookadvisor.model.db.Book.class)
+                    .setParameter("author", book.getAuthor().toLowerCase())
+                    .setParameter("title", book.getTitle().toLowerCase())
+                    .getSingleResult();
+        }
+        catch (Throwable t){
+            dbBook = new com.zzzkvidi4.bookadvisor.model.db.Book();
+            dbBook.setAuthor(book.getAuthor().toLowerCase());
+            dbBook.setTitle(book.getTitle().toLowerCase());
+            sessionFactory.getCurrentSession().save(dbBook);
+        }
+        BookUser bookUser = new BookUser();
+        bookUser.setUserId(id);
+        bookUser.setBookId(dbBook.getBookId());
+        sessionFactory.getCurrentSession().save(bookUser);
+    }
+
+    public boolean isInFavourite(int id, Book book){
+        User user = sessionFactory
+                .getCurrentSession()
+                .createQuery("from User u left join fetch BookUser bu left join fetch Book b where u.id = :id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        for(BookUser bookUser: user.getBookUser()){
+            com.zzzkvidi4.bookadvisor.model.db.Book dbBook = bookUser.getBook();
+            boolean isInFavourite = dbBook.getAuthor().equals(book.getAuthor().toLowerCase()) && dbBook.getTitle().equals(book.getTitle().toLowerCase());
+            if (isInFavourite) {
+                return true;
+            }
+        }
+        return false;
     }
 }
