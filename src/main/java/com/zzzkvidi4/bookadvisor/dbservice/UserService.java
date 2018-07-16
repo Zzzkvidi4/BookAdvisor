@@ -72,14 +72,15 @@ public class UserService {
         }
     }
 
-    public void addToFavourites(int id, Book book){
+    public void addToFavourites(int id, com.zzzkvidi4.bookadvisor.model.db.Book book){
         com.zzzkvidi4.bookadvisor.model.db.Book dbBook;
         try {
             dbBook = sessionFactory
                     .getCurrentSession()
-                    .createQuery("from Book b where b.author = :author and b.title = :title", com.zzzkvidi4.bookadvisor.model.db.Book.class)
+                    .createQuery("from Book b where b.author = :author and b.title = :title and b.selector = :selector", com.zzzkvidi4.bookadvisor.model.db.Book.class)
                     .setParameter("author", book.getAuthor().toLowerCase())
                     .setParameter("title", book.getTitle().toLowerCase())
+                    .setParameter("selector", book.getSelector().toLowerCase())
                     .getSingleResult();
         }
         catch (Throwable t){
@@ -97,7 +98,7 @@ public class UserService {
     public boolean isInFavourite(int id, Book book){
         User user = sessionFactory
                 .getCurrentSession()
-                .createQuery("from User u left join fetch BookUser bu left join fetch Book b where u.id = :id", User.class)
+                .createQuery("from User u left outer join fetch u.bookUser bu left outer join fetch bu.book where u.id = :id", User.class)
                 .setParameter("id", id)
                 .getSingleResult();
         for(BookUser bookUser: user.getBookUser()){
@@ -108,5 +109,24 @@ public class UserService {
             }
         }
         return false;
+    }
+
+    public com.zzzkvidi4.bookadvisor.model.db.Book getBookFromFavourite(int userId, int bookId){
+        try {
+            User user = sessionFactory
+                    .getCurrentSession()
+                    .createQuery("from User u left outer join fetch u.bookUser bu left outer join fetch bu.book b where u.id = :userId and b.id = :bookId", User.class)
+                    .setParameter("userId", userId)
+                    .setParameter("bookId", bookId)
+                    .getSingleResult();
+            if (user.getBookUser().iterator().hasNext()){
+                return user.getBookUser().iterator().next().getBook();
+            } else {
+                return null;
+            }
+        }
+        catch(Throwable t){
+            return null;
+        }
     }
 }
