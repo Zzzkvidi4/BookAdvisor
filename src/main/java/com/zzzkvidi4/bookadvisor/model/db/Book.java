@@ -16,6 +16,9 @@ public class Book {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "selector")
+    private String selector;
+
     public int getBookId() {
         return bookId;
     }
@@ -34,5 +37,13 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSelector() {
+        return selector;
+    }
+
+    public void setSelector(String selector) {
+        this.selector = selector;
     }
 }
