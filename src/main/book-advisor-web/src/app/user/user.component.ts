@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../service/user-service/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {User} from "../model/User";
+import {Review} from "../model/Review";
+import {Book} from "../model/Book";
 
 @Component({
   selector: 'app-user',
@@ -9,6 +12,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class UserComponent implements OnInit {
   private id: number;
+  user: User;
+  reviews: Review[];
+  selectedBook: Book;
 
   constructor(
     private userService: UserService,
@@ -24,6 +30,7 @@ export class UserComponent implements OnInit {
         if (resp.body.data == null) {
           this.router.navigate(["index"]);
         }
+        this.user = resp.body.data;
       },
       error => {
         this.router.navigate(["accounts"]);
@@ -31,4 +38,15 @@ export class UserComponent implements OnInit {
     )
   }
 
+  showReviews(book: Book) {
+    this.selectedBook = book;
+    this.userService.getReviewsFavourite(this.id, book.bookId).subscribe(
+      resp => {
+        this.reviews = resp.body.data;
+        if (this.reviews == null) {
+          this.router.navigate(["index"]);
+        }
+      }
+    )
+  }
 }
