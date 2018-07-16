@@ -47,9 +47,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/books/**", "/reviews/**", "/users").permitAll();
         http.authorizeRequests().antMatchers("/users/**").hasAnyRole("USER");
+        http.authorizeRequests().antMatchers("/users/check-login").permitAll();
         http.exceptionHandling().authenticationEntryPoint(new RESTAuthenticationEntryPoint());
         http.formLogin().successHandler(successHandler);
         http.formLogin().failureHandler(new RESTAuthenticationFailureHandler());
