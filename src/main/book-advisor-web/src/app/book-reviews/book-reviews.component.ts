@@ -5,6 +5,8 @@ import {Book} from "../model/Book";
 import {ReviewRetrieverService} from "../service/review-retriever/review-retriever.service";
 import {Review} from "../model/Review";
 import {MatTableDataSource} from "@angular/material";
+import {LoginService} from "../service/loginner/login.service";
+import {UserService} from "../service/user-service/user.service";
 
 @Component({
   selector: 'app-book-reviews',
@@ -20,12 +22,15 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
   reviews: Review[] = null;
   dataSource = new MatTableDataSource();
   isError: boolean = false;
+  isAuthenticated: boolean;
+  isInFavourite: boolean = false;
 
   constructor(
     private bookSearchService: BookSearchService,
     private location: ActivatedRoute,
     private reviewRetrieverService: ReviewRetrieverService,
     private router: Router,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
@@ -36,6 +41,15 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
     }
     console.log(id);
     console.log(this.book);
+    this.isAuthenticated = LoginService.isAuthorized;
+    this.userService.isInFavourite(id, this.book).subscribe(
+      resp => {
+        this.isInFavourite = resp.body.data;
+      },
+      error => {
+        console.log(error);
+      }
+    );
     this.reviewRetrieverService.retrieveReviews(this.book).subscribe(
       resp => {
         console.log(resp);
@@ -50,4 +64,18 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
     )
   }
 
+  addToFavourite() {
+    if (!this.isAuthenticated) {
+      this.router.navigate(["/accounts"]);
+    } else {
+      this.userService.addToFavourite(LoginService.userId, this.book).subscribe(
+        resp => {
+          this.isInFavourite = resp.body.data;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+  }
 }
