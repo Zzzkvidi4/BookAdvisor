@@ -1,5 +1,6 @@
 package com.zzzkvidi4.bookadvisor.searcher;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -17,12 +18,15 @@ public class WebDriverConfigurator {
         options.setHeadless(true);
         WebDriver driver = new FirefoxDriver(options);
         WebDriverRunner.setWebDriver(driver);*/
-        try {
-            WebDriver firefox = new RemoteWebDriver(new URL("http://localhost:32768"), DesiredCapabilities.firefox());
+        /*try {
+            WebDriver firefox = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox());
             WebDriverRunner.setWebDriver(firefox);
         }
         catch(MalformedURLException e){
             Logger.getLogger(WebDriverConfigurator.class.getName()).warning(e.getMessage());
-        }
+        }*/
+        Configuration.remote = "http://localhost:4444/wd/hub";
+        Configuration.browserCapabilities = DesiredCapabilities.firefox();
+        Configuration.headless = true;
     }
 }
