@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+COPY /target/BookAdvisor-1.0-SNAPSHOT.jar /home/zzzkvidi4/images/book-advisor/
+WORKDIR /home/zzzkvidi4/images/book-advisor
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","BookAdvisor-1.0-SNAPSHOT.jar"]
