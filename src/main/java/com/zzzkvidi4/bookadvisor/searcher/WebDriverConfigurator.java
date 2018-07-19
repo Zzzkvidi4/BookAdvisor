@@ -18,15 +18,16 @@ public class WebDriverConfigurator {
         options.setHeadless(true);
         WebDriver driver = new FirefoxDriver(options);
         WebDriverRunner.setWebDriver(driver);*/
-        /*try {
-            WebDriver firefox = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox());
+        Logger.getLogger(WebDriverConfigurator.class.getName()).info(Configuration.remote);
+        try {
+            WebDriver firefox = new RemoteWebDriver(new URL("http://selenium_hub:4444/wd/hub"), DesiredCapabilities.firefox());
             WebDriverRunner.setWebDriver(firefox);
         }
         catch(MalformedURLException e){
             Logger.getLogger(WebDriverConfigurator.class.getName()).warning(e.getMessage());
-        }*/
-        Configuration.remote = "http://localhost:4444/wd/hub";
-        Configuration.browserCapabilities = DesiredCapabilities.firefox();
-        Configuration.headless = true;
+        }
+        //Configuration.remote = "http://localhost:4444/wd/hub";
+        /*Configuration.browserCapabilities = DesiredCapabilities.firefox();
+        Configuration.headless = true;*/
     }
 }
