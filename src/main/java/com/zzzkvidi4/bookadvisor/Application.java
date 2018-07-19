@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 @Configuration
@@ -29,6 +30,10 @@ public class Application {
     }
 
     public static void main(String... args){
+        System.out.println(Arrays.toString(args));
+        for(String arg: args) {
+            Logger.getLogger(Application.class.getName()).info("Arg: " + arg);
+        }
         SpringApplication.run(Application.class, args);
     }
 
