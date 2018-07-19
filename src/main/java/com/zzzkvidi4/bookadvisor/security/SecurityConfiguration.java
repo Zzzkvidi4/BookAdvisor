@@ -50,8 +50,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/books/**", "/reviews/**", "/users").permitAll();
-        http.authorizeRequests().antMatchers("/users/**").hasAnyRole("USER");
         http.authorizeRequests().antMatchers("/users/check-login").permitAll();
+        http.authorizeRequests().antMatchers("/users/**").hasAnyRole("USER");
         http.exceptionHandling().authenticationEntryPoint(new RESTAuthenticationEntryPoint());
         http.formLogin().successHandler(successHandler);
         http.formLogin().failureHandler(new RESTAuthenticationFailureHandler());

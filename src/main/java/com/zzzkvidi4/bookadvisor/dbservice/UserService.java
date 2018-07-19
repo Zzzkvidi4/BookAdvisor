@@ -74,16 +74,14 @@ public class UserService {
         com.zzzkvidi4.bookadvisor.model.db.Book dbBook;
         try {
             dbBook = entityManager
-                    .createQuery("from Book b where b.author = :author and b.title = :title and b.selector = :selector", com.zzzkvidi4.bookadvisor.model.db.Book.class)
+                    .createQuery("from Book b where lower(b.author) = :author and lower(b.title) = :title and lower(b.selector) = :selector", com.zzzkvidi4.bookadvisor.model.db.Book.class)
                     .setParameter("author", book.getAuthor().toLowerCase())
                     .setParameter("title", book.getTitle().toLowerCase())
                     .setParameter("selector", book.getSelector().toLowerCase())
                     .getSingleResult();
         }
         catch (Throwable t){
-            dbBook = new com.zzzkvidi4.bookadvisor.model.db.Book();
-            dbBook.setAuthor(book.getAuthor().toLowerCase());
-            dbBook.setTitle(book.getTitle().toLowerCase());
+            dbBook = book;
             entityManager.persist(dbBook);
         }
         BookUser bookUser = new BookUser();
