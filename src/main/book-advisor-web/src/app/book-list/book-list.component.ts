@@ -34,6 +34,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
       this.dataSource.data = this.books;
       this.isQuering = false;
       this.isReady = true;
+      this.query = BookSearchService.selector;
     }
   }
 
@@ -56,6 +57,7 @@ export class BookListComponent implements OnInit, AfterViewInit {
           this.books = resp.body;
           this.bookSearchService.setBooks(resp.body);
           BookSearchService.selector = this.query;
+          console.log(BookSearchService.selector);
           console.log(this.books);
           this.dataSource.data = resp.body;
           this.isQuering = false;
