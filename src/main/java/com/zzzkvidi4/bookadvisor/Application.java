@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -20,7 +21,8 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.logging.Logger;
 
 @Configuration
-@EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class})
+@EnableAutoConfiguration
+@EnableTransactionManagement
 @ComponentScan
 public class Application {
     static{
