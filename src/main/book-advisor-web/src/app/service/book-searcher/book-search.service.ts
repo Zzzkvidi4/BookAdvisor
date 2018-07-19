@@ -9,6 +9,7 @@ import {SearchQuery} from "../../model/SearchQuery";
 export class BookSearchService {
 
   static books: Book[] = null;
+  static selector: string;
 
   constructor(private http: HttpClient) {
     console.log("BookSearcher created!");

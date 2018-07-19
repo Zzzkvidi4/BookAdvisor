@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {InjectionToken, NgModule} from '@angular/core';
 
 
 import { AppComponent } from './app.component';
@@ -9,26 +9,34 @@ import { BookReviewsComponent } from './book-reviews/book-reviews.component';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatIconModule, MatInputModule, MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatTableModule
+  MatTableModule,
+  MatDialogModule, MatDialog, MatTabsModule, MatFormFieldModule
 } from "@angular/material";
 import {BookSearchService} from "./service/book-searcher/book-search.service";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {ReviewRetrieverService} from "./service/review-retriever/review-retriever.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CdkTableModule} from "@angular/cdk/table";
+import { LoginComponent } from './login/login.component';
+import {LoginService} from "./service/loginner/login.service";
+import { UserComponent } from './user/user.component';
+import {UserService} from "./service/user-service/user.service";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     BookListComponent,
-    BookReviewsComponent
+    BookReviewsComponent,
+    LoginComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -41,12 +49,20 @@ import {CdkTableModule} from "@angular/cdk/table";
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatFormFieldModule,
   ],
   providers: [
     HttpClient,
     BookSearchService,
     ReviewRetrieverService,
+    MatDialog,
+    LoginService,
+    UserService,
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+}

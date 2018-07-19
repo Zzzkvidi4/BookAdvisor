@@ -25,7 +25,7 @@ public class ReviewRetrieverService {
     }
 
     public List<Review> getReviews(Book book){
-        WebDriverConfigurator.setUpFirefoxHeadless();
+        //WebDriverConfigurator.setUpFirefoxHeadless();
         List<Review> reviews = new LinkedList<>();
         for(Pair<Book.Resource, String> id: book.getIds()){
             reviews.addAll(factory.get(id.getLeft()).getReviews(id.getRight()));

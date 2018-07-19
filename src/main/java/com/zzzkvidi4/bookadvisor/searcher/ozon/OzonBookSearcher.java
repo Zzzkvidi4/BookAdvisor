@@ -33,7 +33,7 @@ public class OzonBookSearcher extends BookSearcher {
     private static final String OZON_BOOK_ID_ATTRIBUTE_NAME = "data-itemid";
 
     public void getBooks(String pattern, HashMap<String, Book> storage) {
-        //WebDriverConfigurator.setUpFirefoxHeadless();
+        WebDriverConfigurator.setUpFirefoxHeadless();
         open(OZON_SEARCH_URL + pattern);
         int pages;
         try {
