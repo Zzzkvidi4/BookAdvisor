@@ -1,0 +1,30 @@
+version: '2'
+services:
+  selenium_hub:
+    image: selenium/hub
+    networks:
+      bookadvisorntw: {}
+    ports:
+      - "4444"
+  firefoxnode:
+    image: selenium/node-firefox
+    networks:
+      bookadvisorntw: {}
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=selenium_hub
+      - HUB_PORT_4444_TCP_PORT=4444
+    ports:
+      - "5555"
+  book-advisor:
+    image: book-advisor
+    ports:
+      - "8080:8080"
+    networks:
+      bookadvisorntw: {}
+    command: java selenium_hub:4444 -jar BookAdvisor-1.0-SNAPSHOT.jar
+    depends_on:
+      - selenium_hub
+      - firefoxnode
+networks:
+  bookadvisorntw:
+    driver: bridge
