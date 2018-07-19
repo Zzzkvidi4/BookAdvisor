@@ -8,4 +8,4 @@ FROM openjdk:8-jdk-alpine
 COPY --from=maven_tool_chain /tmp/target/BookAdvisor*.jar /jars/book-advisor/BookAdvisor.jar
 WORKDIR /jars/book-advisor
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","BookAdvisor.jar", "-Dremote=selenium_hub:4444/wd/hub"]
+ENTRYPOINT ["java","-jar","BookAdvisor.jar"]

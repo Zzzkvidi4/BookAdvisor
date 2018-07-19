@@ -21,7 +21,7 @@ services:
       - "8080:8080"
     networks:
       bookadvisorntw: {}
-    command: java selenium_hub:4444 -jar BookAdvisor.jar
+    command: java -Dremote=selenium_hub:4444 -jar BookAdvisor.jar
     depends_on:
       - selenium_hub
       - firefoxnode
