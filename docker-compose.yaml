@@ -16,12 +16,12 @@ services:
     ports:
       - "5555"
   book-advisor:
-    image: book-advisor
+    build: .
     ports:
       - "8080:8080"
     networks:
       bookadvisorntw: {}
-    command: java selenium_hub:4444 -jar BookAdvisor-1.0-SNAPSHOT.jar
+    command: java selenium_hub:4444 -jar BookAdvisor.jar
     depends_on:
       - selenium_hub
       - firefoxnode
