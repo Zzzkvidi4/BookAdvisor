@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 @Configuration
@@ -25,12 +26,26 @@ import java.util.logging.Logger;
 @EnableTransactionManagement
 @ComponentScan
 public class Application {
+    private static Logger logger = Logger.getLogger(Application.class.getName());
     static{
-        Logger.getLogger(Application.class.getName()).info("Started configuration of headless mode");
+        logger = Logger.getLogger(Application.class.getName());
+        logger.info("Started configuration of headless mode");
         WebDriverManager.firefoxdriver().setup();
     }
 
     public static void main(String... args){
+        for(String arg: args){
+            String[] argParts = arg.split("=");
+            if ((argParts.length == 2) && (argParts[0].equals("-Dremote"))) {
+                SystemConfiguration.isRemote = true;
+                SystemConfiguration.remoteIp = argParts[1];
+            }
+        }
+        if (SystemConfiguration.isRemote){
+            logger.info("Started work in remote mode with remote ip: " + SystemConfiguration.remoteIp);
+        } else {
+            logger.info("Started work in local mode.");
+        }
         SpringApplication.run(Application.class, args);
     }
 
