@@ -5,25 +5,19 @@
   <mat-card-content>
     <mat-card *ngFor="let book of user.books">
       <mat-card-content>
-        <p>{{book.title}} {{book.author}}</p>
-        <button mat-raised-button (click)="showReviews(book)">Отзывы</button>
+        <p>{{book.title}} {{book.author}} <button mat-raised-button (click)="showReviews(book)">Отзывы</button></p>
       </mat-card-content>
     </mat-card>
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="reviews">
-  <mat-card-header>
-    <p>Отзывы о книге {{selectedBook.title}} (автор: {{selectedBook.author}})</p>
-  </mat-card-header>
-  <mat-card-content>
-    <mat-card *ngFor="let review of reviews">
-      <mat-card-header>
-        <p>{{review.date}} from {{review.resource}}</p>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{review.text}}</p>
-      </mat-card-content>
-    </mat-card>
-  </mat-card-content>
-</mat-card>
+<div *ngIf="selectedBook">
+  <mat-card>
+    <mat-card-header>
+      <p>Отзывы о книге {{selectedBook.title}} (автор: {{selectedBook.author}})</p>
+    </mat-card-header>
+    <mat-card-content>
+      <app-review-list [isSuccess]="isSuccess" [isReady]="isReady" [isQuering]="isQuering" [isError]="isError" [reviews]="reviews"></app-review-list>
+    </mat-card-content>
+  </mat-card>
+</div>

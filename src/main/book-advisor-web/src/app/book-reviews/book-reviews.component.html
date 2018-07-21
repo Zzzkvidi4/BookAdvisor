@@ -1,35 +1,10 @@
-<div *ngIf="reviews; then reviewsReadyBlock else reviewsQueringBlock"></div>
-<ng-template #reviewsReadyBlock>
-  <mat-card>
-    <mat-card-header>
-      <p>{{book.author}} {{book.title}}</p>
-      <button *ngIf="!isInFavourite" mat-raised-button (click)="addToFavourite()">В избранное</button>
+<mat-card>
+  <mat-card-header>
+    <p>{{book.author}} {{book.title}} <button *ngIf="!isInFavourite" mat-raised-button (click)="addToFavourite()">В избранное</button>
       <button *ngIf="isInFavourite" mat-raised-button disabled>В избранном</button>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-card *ngFor="let review of reviews">
-        <mat-card-header>
-          <p>{{review.date}} from {{review.resource}}</p>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{review.text}}</p>
-        </mat-card-content>
-      </mat-card>
-    </mat-card-content>
-  </mat-card>
-</ng-template>
-<ng-template #reviewsQueringBlock>
-  <div *ngIf="!isError; then isRetrievingBlock else isErrorBlock"></div>
-  <ng-template #isRetrievingBlock>
-    <mat-spinner></mat-spinner>
-  </ng-template>
-
-  <ng-template #isErrorBlock>
-    <mat-card>
-      <mat-card-title>Ops, something went wrong!</mat-card-title>
-      <mat-card-content>
-        Please, contact with our administrator!
-      </mat-card-content>
-    </mat-card>
-  </ng-template>
-</ng-template>
+    </p>
+  </mat-card-header>
+  <mat-card-content>
+    <app-review-list [isSuccess]="isSuccess" [isReady]="isReady" [isQuering]="isQuering" [isError]="isError" [reviews]="reviews"></app-review-list>
+  </mat-card-content>
+</mat-card>

@@ -22,6 +22,7 @@ import { LoginComponent } from './login/login.component';
 import {LoginService} from "./service/loginner/login.service";
 import { UserComponent } from './user/user.component';
 import {UserService} from "./service/user-service/user.service";
+import { ReviewListComponent } from './review-list/review-list.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import {UserService} from "./service/user-service/user.service";
     BookReviewsComponent,
     LoginComponent,
     UserComponent,
+    ReviewListComponent,
   ],
   imports: [
     BrowserModule,
