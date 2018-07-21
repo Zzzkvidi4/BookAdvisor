@@ -18,4 +18,9 @@ public class Pair<LEFT, RIGHT> {
         this.left = left;
         this.right = right;
     }
+
+    @Override
+    public String toString() {
+        return "Pair[left: " + left.toString() + ", right: " + right.toString() + "]";
+    }
 }

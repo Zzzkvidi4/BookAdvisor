@@ -6,7 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Book {
-    public enum Resource {OZON, LITRES}
+    public enum Resource {OZON, LITRES;
+
+        @Override
+        public String toString() {
+            return this.name();
+        }
+    }
     private String author;
     private String title;
     private BigDecimal price;
@@ -60,5 +66,10 @@ public class Book {
     @Override
     public int hashCode() {
         return title.hashCode() + author.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Book[" + "author: " + getAuthor() + ", title: " + getTitle() + ", " + "ids: " + getIds().toString() + "]";
     }
 }

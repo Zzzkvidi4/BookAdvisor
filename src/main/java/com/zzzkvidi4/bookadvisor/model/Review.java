@@ -30,4 +30,9 @@ public class Review {
     public void setResource(Book.Resource resource) {
         this.resource = resource;
     }
+
+    @Override
+    public String toString() {
+        return "Review[date: " + date + ", text: " + text + ", resource: " + resource.toString() + "]";
+    }
 }

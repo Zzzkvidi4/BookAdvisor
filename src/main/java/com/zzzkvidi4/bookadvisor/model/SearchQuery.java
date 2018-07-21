@@ -26,4 +26,9 @@ public class SearchQuery {
     public Set<Book.Resource> getResources(){
         return this.resources;
     }
+
+    @Override
+    public String toString() {
+        return "SearchQuery[selector: " + selector + ", resources: " + resources.toString() + "]";
+    }
 }
