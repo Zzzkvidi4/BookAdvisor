@@ -15,6 +15,21 @@ export class AppComponent implements OnInit {
       this.userId = LoginService.userId;
       this.username = LoginService.username;
     });
+
+    this.loginService.isLoggedIn().subscribe(
+      resp => {
+        console.log(resp);
+        if (resp.body.data != null) {
+          LoginService.username = resp.body.data.username;
+          LoginService.userId = resp.body.data.userId;
+          LoginService.isAuthorized = true;
+          LoginService.logged.emit(true);
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
   title = 'app';
   isAuthorized: boolean;
