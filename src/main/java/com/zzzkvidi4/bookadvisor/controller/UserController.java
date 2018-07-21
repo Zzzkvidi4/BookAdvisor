@@ -1,5 +1,7 @@
 package com.zzzkvidi4.bookadvisor.controller;
 
+
+import com.zzzkvidi4.bookadvisor.annotation.Logged;
 import com.zzzkvidi4.bookadvisor.dbservice.UserService;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.model.Review;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class UserController {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private UserService userService;
     private ReviewRetrieverService reviewRetrieverService;
     private BookSearcherService bookSearcherService;
@@ -43,6 +47,7 @@ public class UserController {
         return userService.getUsers().size();
     }
 
+    @Logged(message = "User creation")
     @RequestMapping(path = "/users", method = RequestMethod.POST)
     public ResponseContainer<Boolean> createUser(@RequestBody User user){
         ResponseContainer<Boolean> response = new ResponseContainer<>();
@@ -50,6 +55,7 @@ public class UserController {
         return response;
     }
 
+    @Logged(message = "Checking login")
     @RequestMapping(path = "/users/check-login", method = RequestMethod.GET)
     public ResponseContainer<Boolean> checkLoginUnique(@RequestParam("login") String login){
         ResponseContainer<Boolean> response = new ResponseContainer<>();
@@ -57,6 +63,7 @@ public class UserController {
         return response;
     }
 
+    @Logged(message = "Getting user by id")
     @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
     public ResponseContainer<User> getUserById(@PathVariable int id){
         User user = userService.getUserById(id);
@@ -71,6 +78,7 @@ public class UserController {
         return response;
     }
 
+    @Logged(message = "Adding to favourite")
     @RequestMapping(path = "/users/{id}/favourites", method = RequestMethod.POST)
     public ResponseContainer<Boolean> addToFavourite(@PathVariable int id, @RequestBody com.zzzkvidi4.bookadvisor.model.db.Book book){
         ResponseContainer<Boolean> response = new ResponseContainer<>();
@@ -82,6 +90,7 @@ public class UserController {
         return response;
     }
 
+    @Logged(message = "Checking is in favourite")
     @RequestMapping(path = "/users/{id}/favourites/is-in", method = RequestMethod.POST)
     public ResponseContainer<Boolean> isInFavourite(@PathVariable int id, @RequestBody Book book){
         ResponseContainer<Boolean> response = new ResponseContainer<>();
@@ -93,6 +102,7 @@ public class UserController {
         return response;
     }
 
+    @Logged(message = "Retrieving reviews form favourite book")
     @RequestMapping(path = "/users/{userId}/favourites/{bookId}", method = RequestMethod.GET)
     public ResponseContainer<Collection<Review>> getReviewsFromFavourite(@PathVariable(name = "userId") int userId, @PathVariable(name = "bookId") int bookId){
         com.zzzkvidi4.bookadvisor.model.db.Book dbBook = userService.getBookFromFavourite(userId, bookId);

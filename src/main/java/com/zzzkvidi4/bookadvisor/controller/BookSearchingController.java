@@ -1,5 +1,6 @@
 package com.zzzkvidi4.bookadvisor.controller;
 
+import com.zzzkvidi4.bookadvisor.annotation.Logged;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.model.SearchQuery;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcherService;
@@ -11,7 +12,6 @@ import java.util.logging.Logger;
 
 @RestController
 public class BookSearchingController {
-    private Logger logger = Logger.getLogger(BookSearchingController.class.getName());
     private BookSearcherService bookSearcherService;
 
     @Autowired
@@ -19,11 +19,9 @@ public class BookSearchingController {
         this.bookSearcherService = bookSearcherService;
     }
 
+    @Logged(message = "Fetching books")
     @RequestMapping(path = "/books", method = RequestMethod.POST)
     public Collection<Book> getBooks(@RequestBody SearchQuery searchQuery) {
-        logger.info("Started fetching books by \"" + searchQuery + "\"");
-        Collection<Book> books = bookSearcherService.getBooks(searchQuery);
-        logger.info("Successfully fetched " + books.size() + " books.");
-        return books;
+        return bookSearcherService.getBooks(searchQuery);
     }
 }
