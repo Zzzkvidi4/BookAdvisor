@@ -29,4 +29,8 @@ export class LoginService {
   checkLogin(login: string): Observable<HttpResponse<ResponseContainer<boolean>>> {
     return this.http.get<ResponseContainer<boolean>>("http://localhost:8080/users/check-login?login=" + login, {observe: "response", withCredentials: true});
   }
+
+  isLoggedIn(): Observable<HttpResponse<ResponseContainer<User>>> {
+    return this.http.get<ResponseContainer<User>>("http://localhost:8080/users/is-logged-in", {observe: "response", withCredentials: true});
+  }
 }
