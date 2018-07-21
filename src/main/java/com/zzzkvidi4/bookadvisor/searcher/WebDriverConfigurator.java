@@ -1,7 +1,7 @@
 package com.zzzkvidi4.bookadvisor.searcher;
 
 import com.codeborne.selenide.WebDriverRunner;
-import com.zzzkvidi4.bookadvisor.SystemConfiguration;
+import com.zzzkvidi4.bookadvisor.model.SystemConfiguration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
