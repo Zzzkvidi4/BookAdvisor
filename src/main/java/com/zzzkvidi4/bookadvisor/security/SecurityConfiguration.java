@@ -7,9 +7,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 @Configuration
 @EnableWebSecurity
@@ -17,6 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService userDetailsService;
     private PasswordEncoder encoder;
     private AuthenticationSuccessHandler successHandler;
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired
     public void setUserDetailsService(CustomUserDetailsService userDetailsService) {
@@ -40,6 +49,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.successHandler = successHandler;
     }
 
+    @Autowired
+    public void setLogoutSuccessHandler(LogoutSuccessHandler logoutSuccessHandler){
+        this.logoutSuccessHandler = logoutSuccessHandler;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
@@ -55,7 +69,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().authenticationEntryPoint(new RESTAuthenticationEntryPoint());
         http.formLogin().successHandler(successHandler);
         http.formLogin().failureHandler(new RESTAuthenticationFailureHandler());
-        http.logout();
+        http.logout().logoutUrl("/logout");
+        http.logout().logoutSuccessHandler(logoutSuccessHandler);
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

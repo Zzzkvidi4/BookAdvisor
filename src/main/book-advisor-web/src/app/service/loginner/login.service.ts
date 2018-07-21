@@ -19,7 +19,7 @@ export class LoginService {
   }
 
   logout(): Observable<HttpResponse<any>> {
-    return this.http.get<any>("http://localhost:8080/logout", {observe: "response", withCredentials: true});
+    return this.http.post<any>("http://localhost:8080/logout", {observe: "response", withCredentials: true});
   }
 
   register(loginInfo: LoginInfo): Observable<HttpResponse<ResponseContainer<boolean>>> {

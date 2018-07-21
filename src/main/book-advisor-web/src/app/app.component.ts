@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
         LoginService.logged.emit(true);
       },
       error => {
-
+        console.log(error);
       }
     )
   }
