@@ -112,7 +112,7 @@ public class UserController {
             return response;
         }
         Collection<Book> books = bookSearcherService.getBooks(new SearchQuery(dbBook.getSelector(), Book.Resource.LITRES, Book.Resource.OZON));
-        books.removeIf(book -> !dbBook.getAuthor().equals(book.getAuthor().toLowerCase()) || !dbBook.getTitle().equals(book.getTitle().toLowerCase()));
+        books.removeIf(book -> !dbBook.getAuthor().equals(book.getAuthor()) || !dbBook.getTitle().equals(book.getTitle()));
         List<Review> reviews = new LinkedList<>();
         for(Book book: books){
             reviews.addAll(reviewRetrieverService.getReviews(book));
