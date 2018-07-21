@@ -13,6 +13,7 @@ import com.zzzkvidi4.bookadvisor.searcher.ReviewRetrieverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -60,6 +61,20 @@ public class UserController {
     public ResponseContainer<Boolean> checkLoginUnique(@RequestParam("login") String login){
         ResponseContainer<Boolean> response = new ResponseContainer<>();
         response.setData(userService.getUserByLogin(login) == null);
+        return response;
+    }
+
+    @Logged(message = "Checking is logged in")
+    @RequestMapping(path = "/users/is-logged-in", method = RequestMethod.GET)
+    public ResponseContainer<User> isLoggedIn(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ResponseContainer<User> response = new ResponseContainer<>();
+        if (auth.isAuthenticated()) {
+            response.setData(null);
+        } else {
+            response.setData(userService.getUserByLogin(auth.getName()));
+        }
+        response.setAuthenticated(auth.isAuthenticated());
         return response;
     }
 
