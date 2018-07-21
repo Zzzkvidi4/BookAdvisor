@@ -57,4 +57,9 @@ public class User {
     public Set<BookUser> getBookUser() {
         return bookUser;
     }
+
+    @Override
+    public String toString() {
+        return "db.User[id: " + userId + ", username: " + username + "]";
+    }
 }
