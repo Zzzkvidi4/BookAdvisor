@@ -6,3 +6,15 @@
 .example-container > * {
   width: 100%;
 }
+
+.error{
+  color: #FF0000;
+}
+
+.form-field-input{
+  padding-bottom: 20px;
+}
+
+.form-field-input:last-of-type{
+  padding-bottom: 0px;
+}
