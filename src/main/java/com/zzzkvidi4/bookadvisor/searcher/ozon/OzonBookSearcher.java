@@ -47,14 +47,25 @@ public class OzonBookSearcher extends BookSearcher {
             pages = Integer.parseInt(divider.getText());
 
             for (int i = 2; i < pages; ++i) {
-                $(OZON_FOOTER_CSS_CLASS).scrollTo().waitUntil(
-                        uploaded(
-                                $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS),
-                                OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS,
-                                OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS
-                        ),
-                        10000
-                );
+                boolean isUploaded = false;
+                int iteration = 0;
+                while (!isUploaded && (iteration < 10)) {
+                    try {
+                        $(OZON_FOOTER_CSS_CLASS).scrollTo().waitUntil(
+                                uploaded(
+                                        $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS),
+                                        OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS,
+                                        OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS
+                                ),
+                                10000
+                        );
+                        isUploaded = true;
+                    }
+                    catch (Exception e) {
+                        isUploaded = false;
+                        ++iteration;
+                    }
+                }
             }
         }
         ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);

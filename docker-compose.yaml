@@ -8,6 +8,8 @@ services:
       - "4444"
   firefoxnode:
     image: selenium/node-firefox
+    volumes:
+      - /dev/shm:/dev/shm
     networks:
       bookadvisorntw: {}
     environment:

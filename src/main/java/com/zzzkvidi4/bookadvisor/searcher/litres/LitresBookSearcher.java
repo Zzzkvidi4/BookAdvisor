@@ -43,14 +43,24 @@ public class LitresBookSearcher extends BookSearcher {
             } else if (loadMoreBtn.isDisplayed()) {
                 loadMoreBtn.click();
             }
-            loader.waitUntil(
-                    uploaded(
-                            $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS),
-                            LITRES_SEARCH_RESULT_CONTAINER_ID,
-                            LITRES_SEARCH_RESULT_ELEMENT_CLASS
-                    ),
-                    10000
-            );
+            boolean isUploaded = false;
+            int iteration = 0;
+            while (!isUploaded && (iteration < 10)) {
+                try {
+                    loader.waitUntil(
+                            uploaded(
+                                    $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS),
+                                    LITRES_SEARCH_RESULT_CONTAINER_ID,
+                                    LITRES_SEARCH_RESULT_ELEMENT_CLASS
+                            ),
+                            10000
+                    );
+                    isUploaded = true;
+                } catch (Exception e) {
+                    isUploaded = false;
+                    ++iteration;
+                }
+            }
         }
 
         ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
