@@ -33,32 +33,40 @@ public class LitresReviewRetriever implements ReviewRetriever {
 
     private static final String LITRES_BOOK_ID_DELIMITER = "~";
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @Override
     public List<Review> getReviews(String id) {
         WebDriverConfigurator.setUpFirefoxHeadless();
         String[] path = id.split(LITRES_BOOK_ID_DELIMITER);
         open(LITRES_DETAIL_URL + path[0] + "/" + path[1] + "/" + "#recenses");
         List<Review> reviewsObjList = new LinkedList<>();
-        SelenideElement reviewsCount = $(LITRES_REVIEWS_LINK_ID).find(LITRES_REVIEWS_COUNT_CLASS);
-        if (!reviewsCount.exists()){
-            close();
-            return reviewsObjList;
-        }
-        SelenideElement reviewsBlock = $(LITRES_REVIEWS_BLOCK_ID);
-        SelenideElement reviewsMoreBtn = $(LITRES_REVIEWS_MORE_BTN_ID);
         try {
-            while (reviewsMoreBtn.exists() && reviewsMoreBtn.isDisplayed()) {
-                reviewsMoreBtn.click();
-                reviewsMoreBtn.waitUntil(Condition.visible, 10000);
+            logger.info("Successfully started retrieving reviews");
+            SelenideElement reviewsCount = $(LITRES_REVIEWS_LINK_ID).find(LITRES_REVIEWS_COUNT_CLASS);
+            if (!reviewsCount.exists()) {
+                close();
+                return reviewsObjList;
             }
-        }
-        catch(Throwable e){
-            Logger.getLogger(getClass().getName()).info("Scrolled page up to the end");
-        }
+            SelenideElement reviewsBlock = $(LITRES_REVIEWS_BLOCK_ID);
+            SelenideElement reviewsMoreBtn = $(LITRES_REVIEWS_MORE_BTN_ID);
+            try {
+                while (reviewsMoreBtn.exists() && reviewsMoreBtn.isDisplayed()) {
+                    reviewsMoreBtn.click();
+                    reviewsMoreBtn.waitUntil(Condition.visible, 10000);
+                }
+            } catch (Throwable e) {
+                Logger.getLogger(getClass().getName()).info("Scrolled page up to the end");
+            }
 
-        ElementsCollection reviews = reviewsBlock.findAll(LITRES_REVIEW_ITEM_CLASS);
-        reviews.forEach(review -> reviewsObjList.add(toReview(review)));
-        close();
+            ElementsCollection reviews = reviewsBlock.findAll(LITRES_REVIEW_ITEM_CLASS);
+            reviews.forEach(review -> reviewsObjList.add(toReview(review)));
+            close();
+        }
+        catch (Exception e) {
+            logger.severe("Exception occurred while reviews retrieving");
+            logger.severe(e.getMessage());
+        }
         return reviewsObjList;
     }
 

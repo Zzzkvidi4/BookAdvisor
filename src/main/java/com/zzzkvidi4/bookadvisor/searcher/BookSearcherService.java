@@ -11,10 +11,13 @@ import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.logging.Logger;
 
 @Service("bookSearcherService")
 public class BookSearcherService {
     private HashMap<Book.Resource, BookSearcher> factory = new HashMap<>();
+
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Resource(name = "litresBookSearcher")
     private void setLitresBookSearcher(BookSearcher searcher){
@@ -30,7 +33,13 @@ public class BookSearcherService {
         //WebDriverConfigurator.setUpFirefoxHeadless();
         HashMap<String, Book> storage = new LinkedHashMap<>();
         for(Book.Resource resource: query.getResources()){
-            factory.get(resource).getBooks(query.getSelector(), storage);
+            try {
+                factory.get(resource).getBooks(query.getSelector(), storage);
+            }
+            catch (Exception e) {
+                logger.severe("Exception occurred with book searcher!");
+                logger.severe(e.getMessage());
+            }
         }
         return storage.values();
     }

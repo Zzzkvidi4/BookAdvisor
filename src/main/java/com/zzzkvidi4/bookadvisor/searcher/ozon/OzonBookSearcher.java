@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
@@ -32,45 +33,52 @@ public class OzonBookSearcher extends BookSearcher {
     private static final String OZON_BOOK_PRICE_ATTRIBUTE_NAME = "data-price";
     private static final String OZON_BOOK_ID_ATTRIBUTE_NAME = "data-itemid";
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     public void getBooks(String pattern, HashMap<String, Book> storage) {
         WebDriverConfigurator.setUpFirefoxHeadless();
         open(OZON_SEARCH_URL + pattern);
-        int pages;
         try {
-            $(OZON_FOOTER_CSS_CLASS).scrollTo().shouldBe(hidden);
-        }
-        catch (Throwable e) {
-            pages = 1;
-        }
-        SelenideElement divider = $(OZON_SEARCH_PAGE_DIVIDER_CSS_CLASS);
-        if (divider.exists()) {
-            pages = Integer.parseInt(divider.getText());
+            logger.info("Successfully opened url: " + OZON_SEARCH_URL + pattern);
+            int pages;
+            try {
+                $(OZON_FOOTER_CSS_CLASS).scrollTo().shouldBe(hidden);
+            } catch (Throwable e) {
+                pages = 1;
+            }
+            SelenideElement divider = $(OZON_SEARCH_PAGE_DIVIDER_CSS_CLASS);
+            if (divider.exists()) {
+                pages = Integer.parseInt(divider.getText());
 
-            for (int i = 2; i < pages; ++i) {
-                boolean isUploaded = false;
-                int iteration = 0;
-                while (!isUploaded && (iteration < 10)) {
-                    try {
-                        $(OZON_FOOTER_CSS_CLASS).scrollTo().waitUntil(
-                                uploaded(
-                                        $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS),
-                                        OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS,
-                                        OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS
-                                ),
-                                10000
-                        );
-                        isUploaded = true;
-                    }
-                    catch (Exception e) {
-                        isUploaded = false;
-                        ++iteration;
+                for (int i = 2; i < pages; ++i) {
+                    boolean isUploaded = false;
+                    int iteration = 0;
+                    while (!isUploaded && (iteration < 10)) {
+                        try {
+                            $(OZON_FOOTER_CSS_CLASS).scrollTo().waitUntil(
+                                    uploaded(
+                                            $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS),
+                                            OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS,
+                                            OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS
+                                    ),
+                                    10000
+                            );
+                            isUploaded = true;
+                        } catch (Exception e) {
+                            isUploaded = false;
+                            ++iteration;
+                        }
                     }
                 }
             }
+            ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);
+            books.forEach(b -> pushBook(toBook(b), storage));
+            close();
         }
-        ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);
-        books.forEach(b -> pushBook(toBook(b), storage));
-        close();
+        catch (Exception e) {
+            logger.severe("Exception occurred while searching for books");
+            logger.severe(e.toString());
+        }
     }
 
     private Book toBook(SelenideElement book){

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Selenide.$;
@@ -29,28 +30,37 @@ public class OzonReviewRetriever implements ReviewRetriever {
     private static final String OZON_REVIEW_TEXT_BLOCK_CSS_CLASS = ".eComment_Text_Text";
     private static final String OZON_REVIEW_DATE_BLOCK_CSS_CLASS = ".eComment_Info_Date";
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @Override
     public List<Review> getReviews(String id) {
         WebDriverConfigurator.setUpFirefoxHeadless();
         List<Review> reviewsObjList = new LinkedList<>();
         open(OZON_DETAIL_URL + id + "/");
-        SelenideElement reviewsBtn = $(OZON_REVIEWS_BTN_CSS_CLASS);
-        if (!reviewsBtn.exists()) {
-            return reviewsObjList;
+        try {
+            logger.info("Successfully started reviews retrieving");
+            SelenideElement reviewsBtn = $(OZON_REVIEWS_BTN_CSS_CLASS);
+            if (!reviewsBtn.exists()) {
+                return reviewsObjList;
+            }
+
+            reviewsBtn.click();
+            $(OZON_REVIEWS_BLOCK_CSS_CLASS).waitUntil(appear, 10000);
+            SelenideElement showMoreComments;
+            while ((showMoreComments = $(OZON_SHOW_MORE_COMMENTS_BTN_CSS_CLASS)).exists() && showMoreComments.attr("class").contains("mShow")) {
+                showMoreComments.scrollTo();
+                showMoreComments.click();
+            }
+
+            ElementsCollection reviews = $(OZON_REVIEWS_BLOCK_CSS_CLASS).findAll(OZON_REVIEW_BLOCK_CSS_CLASS);
+
+            reviews.forEach(review -> reviewsObjList.add(toReview(review)));
+            close();
         }
-
-        reviewsBtn.click();
-        $(OZON_REVIEWS_BLOCK_CSS_CLASS).waitUntil(appear, 10000);
-        SelenideElement showMoreComments;
-        while ((showMoreComments = $(OZON_SHOW_MORE_COMMENTS_BTN_CSS_CLASS)).exists() && showMoreComments.attr("class").contains("mShow")) {
-            showMoreComments.scrollTo();
-            showMoreComments.click();
+        catch (Exception e) {
+            logger.severe("Exception occurred while retrieving reviews");
+            logger.severe(e.getMessage());
         }
-
-        ElementsCollection reviews = $(OZON_REVIEWS_BLOCK_CSS_CLASS).findAll(OZON_REVIEW_BLOCK_CSS_CLASS);
-
-        reviews.forEach(review -> reviewsObjList.add(toReview(review)));
-        close();
         return reviewsObjList;
     }
 

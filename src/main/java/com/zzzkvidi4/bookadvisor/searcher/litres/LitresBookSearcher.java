@@ -31,41 +31,50 @@ public class LitresBookSearcher extends BookSearcher {
     private static final String LITRES_SEARCH_RESULT_CONTAINER_ID = "#searchresults";
     private static final String LITRES_SEARCH_RESULT_ELEMENT_CLASS = ".search__item";
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @Override
     public void getBooks(String pattern, HashMap<String, Book> storage) {
         WebDriverConfigurator.setUpFirefoxHeadless();
         open(LITRES_SEARCH_URL + pattern);
-        SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
-        SelenideElement loadMoreBtn = $(LITRES_BOOK_LOAD_BTN);
-        while (loader.isDisplayed() || loadMoreBtn.isDisplayed()) {
-            if (loader.isDisplayed()) {
-                loader.scrollTo();
-            } else if (loadMoreBtn.isDisplayed()) {
-                loadMoreBtn.click();
-            }
-            boolean isUploaded = false;
-            int iteration = 0;
-            while (!isUploaded && (iteration < 10)) {
-                try {
-                    loader.waitUntil(
-                            uploaded(
-                                    $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS),
-                                    LITRES_SEARCH_RESULT_CONTAINER_ID,
-                                    LITRES_SEARCH_RESULT_ELEMENT_CLASS
-                            ),
-                            10000
-                    );
-                    isUploaded = true;
-                } catch (Exception e) {
-                    isUploaded = false;
-                    ++iteration;
+        try {
+            logger.info("Successfully started books retrieving with url: " + LITRES_SEARCH_URL + pattern);
+            SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
+            SelenideElement loadMoreBtn = $(LITRES_BOOK_LOAD_BTN);
+            while (loader.isDisplayed() || loadMoreBtn.isDisplayed()) {
+                if (loader.isDisplayed()) {
+                    loader.scrollTo();
+                } else if (loadMoreBtn.isDisplayed()) {
+                    loadMoreBtn.click();
+                }
+                boolean isUploaded = false;
+                int iteration = 0;
+                while (!isUploaded && (iteration < 10)) {
+                    try {
+                        loader.waitUntil(
+                                uploaded(
+                                        $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS),
+                                        LITRES_SEARCH_RESULT_CONTAINER_ID,
+                                        LITRES_SEARCH_RESULT_ELEMENT_CLASS
+                                ),
+                                10000
+                        );
+                        isUploaded = true;
+                    } catch (Exception e) {
+                        isUploaded = false;
+                        ++iteration;
+                    }
                 }
             }
-        }
 
-        ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
-        books.forEach(book -> pushBook(toBook(book), storage));
-        close();
+            ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
+            books.forEach(book -> pushBook(toBook(book), storage));
+            close();
+        }
+        catch (Exception e) {
+            logger.severe("Exception occurred while retrieving books");
+            logger.severe(e.getMessage());
+        }
     }
 
     private Book toBook(SelenideElement book){
