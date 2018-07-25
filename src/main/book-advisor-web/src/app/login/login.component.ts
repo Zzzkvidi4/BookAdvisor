@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
   checkPasswordEqual() {
     console.log(this.passwordsAreNotEqual);
     this.passwordsAreNotEqual = this.password != this.passwordConfirm;
+    console.log(this.password + " " + this.passwordConfirm);
   }
 
   checkLoginUnique(){

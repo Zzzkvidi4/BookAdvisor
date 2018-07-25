@@ -46,4 +46,9 @@ public class Book {
     public void setSelector(String selector) {
         this.selector = selector;
     }
+
+    @Override
+    public String toString() {
+        return "db.Book[id: " + bookId + ", selector: " + selector + ", author: " + author + ", title: " + title + "]";
+    }
 }

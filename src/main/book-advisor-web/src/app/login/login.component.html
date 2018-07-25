@@ -6,7 +6,7 @@
           Логин и/или пароль неверны!
         </p>
         <div>
-          <mat-form-field>
+          <mat-form-field class="form-field-input">
             <input matInput [(ngModel)]="login" placeholder="Логин" name="login-input" [formControl]="loginFormControl" [errorStateMatcher]="matcher">
             <mat-error *ngIf="loginFormControl.hasError('required')">
               Поле является обязательным!
@@ -17,7 +17,7 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field>
+          <mat-form-field class="form-field-input">
             <input type="password" matInput [(ngModel)]="password" placeholder="Пароль" name="password-input" [formControl]="passwordFormControl" [errorStateMatcher]="matcher">
             <mat-error *ngIf="passwordFormControl.hasError('required')">
               Поле является обязательным!
@@ -28,19 +28,16 @@
           </mat-form-field>
         </div>
         <div>
-          <button mat-button (click)="onAuthorize()" cdkFocusInitial>Авторизация</button>
+          <button mat-button (click)="onAuthorize()" cdkFocusInitial [disabled]="login.length < 5 || password.length < 5">Авторизация</button>
         </div>
       </mat-tab>
       <mat-tab label="Регистрация">
-        <p class="error" *ngIf="nameIsNotUnique">
-          Пользователь с таким логином уже существует!
-        </p>
-        <p class="error" *ngIf="passwordsAreNotEqual">
-          Пароли не совпадают!
-        </p>
+
+
         <div>
-          <mat-form-field>
+          <mat-form-field class="form-field-input">
             <input matInput [(ngModel)]="login" placeholder="Логин" name="login-input" [formControl]="loginFormControl" [errorStateMatcher]="matcher" (change)="checkLoginUnique()">
+            <span class="error" *ngIf="nameIsNotUnique" matSuffix> Пользователь с таким логином уже существует!</span>
             <mat-error *ngIf="loginFormControl.hasError('required')">
               Поле является обязательным!
             </mat-error>
@@ -50,8 +47,9 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field>
-            <input type="password" matInput [(ngModel)]="password" placeholder="Пароль" name="password-input" [formControl]="passwordFormControl" [errorStateMatcher]="matcher" (change)="checkPasswordEqual()">
+          <mat-form-field  class="form-field-input">
+            <input type="password" matInput [(ngModel)]="password" placeholder="Пароль" name="password-input" [formControl]="passwordFormControl" (keyup)="checkPasswordEqual()">
+            <span class="error" *ngIf="passwordsAreNotEqual" matSuffix> Пароли не совпадают!</span>
             <mat-error *ngIf="passwordFormControl.hasError('required')">
               Поле является обязательным!
             </mat-error>
@@ -61,8 +59,8 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field>
-            <input type="password" matInput [(ngModel)]="passwordConfirm" placeholder="Подтверждение пароля" name="password-input" [formControl]="passwordConfirmFormControl" [errorStateMatcher]="matcher"  (change)="checkPasswordEqual()">
+          <mat-form-field  class="form-field-input">
+            <input type="password" matInput [(ngModel)]="passwordConfirm" placeholder="Подтверждение пароля" name="password-input" [formControl]="passwordConfirmFormControl" (keyup)="checkPasswordEqual()">
             <mat-error *ngIf="passwordFormControl.hasError('required')">
               Поле является обязательным!
             </mat-error>
@@ -72,7 +70,7 @@
           </mat-form-field>
         </div>
         <div>
-          <button mat-button (click)="onRegister()" cdkFocusInitial>Регистрация</button>
+          <button mat-button (click)="onRegister()" cdkFocusInitial [disabled]="nameIsNotUnique || passwordsAreNotEqual || login.length < 5 || password.length < 5">Регистрация</button>
         </div>
       </mat-tab>
     </mat-tab-group>

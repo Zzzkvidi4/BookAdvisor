@@ -1,0 +1,28 @@
+<div *ngIf="isReady; then isReadyBlock else isQueringBlock"></div>
+<ng-template #isReadyBlock>
+  <div *ngIf="isError; then isErrorBlock else isSuccessBlock"></div>
+  <ng-template #isErrorBlock>
+    <mat-card>
+        <mat-card-title>Что-то пошло не так!</mat-card-title>
+        <mat-card-content>
+          <p>Проверьте подключение к интернету и попробуйте еще раз!</p>
+          <p>Если вы уверены, что все в порядке, то свяжитесь с нашим администратором.</p>
+        </mat-card-content>
+      </mat-card>
+  </ng-template>
+  <ng-template #isSuccessBlock>
+    <mat-card *ngFor="let review of reviews">
+      <mat-card-header>
+        <p>{{review.date}} с {{review.resource}}</p>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{review.text}}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</ng-template>
+
+<ng-template #isQueringBlock>
+  <mat-spinner></mat-spinner>
+</ng-template>
+

@@ -15,6 +15,10 @@ export class UserComponent implements OnInit {
   user: User;
   reviews: Review[];
   selectedBook: Book;
+  isQuering: Boolean = false;
+  isReady: Boolean = false;
+  isSuccess: Boolean = false;
+  isError: Boolean = false;
 
   constructor(
     private userService: UserService,
@@ -39,13 +43,27 @@ export class UserComponent implements OnInit {
   }
 
   showReviews(book: Book) {
+    this.isQuering = true;
+    this.isReady = false;
     this.selectedBook = book;
     this.userService.getReviewsFavourite(this.id, book.bookId).subscribe(
       resp => {
+        console.log(resp);
         this.reviews = resp.body.data;
         if (this.reviews == null) {
           this.router.navigate(["index"]);
         }
+        this.isQuering = false;
+        this.isReady = true;
+        this.isSuccess = true;
+        this.isError = false;
+      },
+      error => {
+        console.log(error);
+        this.isQuering = false;
+        this.isError = true;
+        this.isReady = true;
+        this.isSuccess = false;
       }
     )
   }

@@ -19,7 +19,7 @@ export class LoginService {
   }
 
   logout(): Observable<HttpResponse<any>> {
-    return this.http.get<any>("http://localhost:8080/logout", {observe: "response", withCredentials: true});
+    return this.http.post<any>("http://localhost:8080/logout", {observe: "response", withCredentials: true});
   }
 
   register(loginInfo: LoginInfo): Observable<HttpResponse<ResponseContainer<boolean>>> {
@@ -28,5 +28,9 @@ export class LoginService {
 
   checkLogin(login: string): Observable<HttpResponse<ResponseContainer<boolean>>> {
     return this.http.get<ResponseContainer<boolean>>("http://localhost:8080/users/check-login?login=" + login, {observe: "response", withCredentials: true});
+  }
+
+  isLoggedIn(): Observable<HttpResponse<ResponseContainer<User>>> {
+    return this.http.get<ResponseContainer<User>>("http://localhost:8080/users/is-logged-in", {observe: "response", withCredentials: true});
   }
 }

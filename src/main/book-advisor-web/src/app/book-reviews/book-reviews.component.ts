@@ -20,10 +20,12 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
 
   book: Book;
   reviews: Review[] = null;
-  dataSource = new MatTableDataSource();
-  isError: boolean = false;
   isAuthenticated: boolean;
   isInFavourite: boolean = false;
+  isQuering: boolean = true;
+  isReady: boolean = false;
+  isSuccess: boolean = false;
+  isError: boolean = false;
 
   constructor(
     private bookSearchService: BookSearchService,
@@ -36,7 +38,7 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     let id = +this.location.snapshot.paramMap.get("id");
     this.book = this.bookSearchService.getBook(id);
-    if (this.book == undefined || this.book == null){
+    if (!this.book){
       this.router.navigate(["/index"]);
     }
     console.log(id);
@@ -44,23 +46,30 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
     this.isAuthenticated = LoginService.isAuthorized;
     this.userService.isInFavourite(id, this.book).subscribe(
       resp => {
+        console.log(resp);
         this.isInFavourite = resp.body.data;
       },
       error => {
         console.log(error);
       }
     );
+    this.isQuering = true;
+    this.isReady = false;
     this.reviewRetrieverService.retrieveReviews(this.book).subscribe(
       resp => {
         console.log(resp);
         this.reviews = resp.body;
-        this.dataSource.data = this.reviews;
+        this.isQuering = false;
+        this.isReady = true;
+        this.isSuccess = true;
         this.isError = false;
       },
       error => {
         console.log(error);
+        this.isQuering = false;
         this.isError = true;
-      }
+        this.isReady = true;
+        this.isSuccess = false;      }
     )
   }
 
