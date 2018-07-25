@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from "./service/loginner/login.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit {
   username: string;
 
   constructor(
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ){}
 
   logout() {
@@ -45,6 +47,7 @@ export class AppComponent implements OnInit {
       resp => {
         LoginService.isAuthorized = false;
         LoginService.logged.emit(true);
+        this.router.navigate(['index']);
       },
       error => {
         console.log(error);
