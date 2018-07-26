@@ -85,11 +85,13 @@ public class LitresBookSearcher extends BookSearcher {
 
             ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
             books.forEach(book -> pushBook(toBook(book), storage));
-            close();
         }
         catch (Throwable t) {
             logger.severe("Exception occurred while retrieving books");
             logger.severe(t.getMessage());
+        }
+        finally {
+            close();
         }
     }
 

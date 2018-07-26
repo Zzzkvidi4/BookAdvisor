@@ -90,11 +90,13 @@ public class OzonBookSearcher extends BookSearcher {
             }
             ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);
             books.forEach(b -> pushBook(toBook(b), storage));
-            close();
         }
         catch (Throwable t) {
             logger.severe("Exception occurred while searching for books");
             logger.severe(t.toString());
+        }
+        finally {
+            close();
         }
     }
 
