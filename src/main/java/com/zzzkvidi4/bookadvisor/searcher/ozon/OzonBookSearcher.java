@@ -1,7 +1,9 @@
 package com.zzzkvidi4.bookadvisor.searcher.ozon;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.zzzkvidi4.bookadvisor.condition.Conditions;
 import com.zzzkvidi4.bookadvisor.model.Book;
 import com.zzzkvidi4.bookadvisor.searcher.BookSearcher;
 import com.zzzkvidi4.bookadvisor.searcher.WebDriverConfigurator;
@@ -17,7 +19,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.close;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.*;
-import static com.zzzkvidi4.bookadvisor.condition.Conditions.uploaded;
 
 @Component("ozonBookSearcher")
 public class OzonBookSearcher extends BookSearcher {
@@ -49,6 +50,26 @@ public class OzonBookSearcher extends BookSearcher {
             SelenideElement divider = $(OZON_SEARCH_PAGE_DIVIDER_CSS_CLASS);
             if (divider.exists()) {
                 pages = Integer.parseInt(divider.getText());
+                for (int i = 2; i < pages; ++i) {
+                    try {
+                        $(".bOneTile:last-of-type")
+                                .scrollTo()
+                                .waitWhile(visible, 10000);
+                    }
+                    catch (Throwable t) {
+                        if (i < pages) {
+                            logger.info("Failed to wait while last book is visible. Scrolling to the end of page " + i);
+                            $(OZON_FOOTER_CSS_CLASS).scrollTo();
+                        } else {
+                            logger.info("Scrolled up to the end");
+                        }
+                    }
+                }
+            }
+            logger.info("Finished retrieving of books. Started transformation.");
+            /*SelenideElement divider = $(OZON_SEARCH_PAGE_DIVIDER_CSS_CLASS);
+            if (divider.exists()) {
+                pages = Integer.parseInt(divider.getText());
 
                 for (int i = 2; i < pages; ++i) {
                     /*boolean isUploaded = false;
@@ -71,7 +92,7 @@ public class OzonBookSearcher extends BookSearcher {
                             logger.warning(t.getMessage());
                         }
                     }*/
-                    int resultListSize = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS).size();
+                    /*int resultListSize = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS).size();
                     while (resultListSize == $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS).size()) {
                         try {
                             $(OZON_FOOTER_CSS_CLASS).shouldBe(
@@ -87,9 +108,10 @@ public class OzonBookSearcher extends BookSearcher {
                         }
                     }
                 }
-            }
+            }*/
             ElementsCollection books = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS);
             books.forEach(b -> pushBook(toBook(b), storage));
+            logger.info("Books transformation finished.");
         }
         catch (Throwable t) {
             logger.severe("Exception occurred while searching for books");

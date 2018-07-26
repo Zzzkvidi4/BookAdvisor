@@ -39,7 +39,21 @@ public class LitresBookSearcher extends BookSearcher {
         open(LITRES_SEARCH_URL + pattern);
         try {
             logger.info("Successfully started books retrieving with url: " + LITRES_SEARCH_URL + pattern);
-            SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
+            int count = Integer.parseInt($(".tab-active").find("span").text());
+            boolean endOfPage = false;
+            while ($(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS).size() != count && !endOfPage) {
+                SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
+                SelenideElement loadBtn = $(LITRES_BOOK_LOAD_BTN);
+
+                if (loader.isDisplayed()) {
+                    loader.scrollTo();
+                } else if (loadBtn.isDisplayed()) {
+                    loadBtn.click();
+                } else {
+                    endOfPage = true;
+                }
+            }
+            /*SelenideElement loader = $(LITRES_BOOK_LOADER_ID);
             SelenideElement loadMoreBtn = $(LITRES_BOOK_LOAD_BTN);
             while (loader.isDisplayed() || loadMoreBtn.isDisplayed()) {
                 if (loader.isDisplayed()) {
@@ -68,7 +82,7 @@ public class LitresBookSearcher extends BookSearcher {
                     }
                 }*/
 
-                int resultListSize = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS).size();
+                /*int resultListSize = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS).size();
                 while (resultListSize == $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS).size()){
                     try {
                         loader.shouldBe(uploaded(
@@ -81,7 +95,7 @@ public class LitresBookSearcher extends BookSearcher {
                         logger.warning(t.getMessage());
                     }
                 }
-            }
+            }*/
 
             ElementsCollection books = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS);
             books.forEach(book -> pushBook(toBook(book), storage));
