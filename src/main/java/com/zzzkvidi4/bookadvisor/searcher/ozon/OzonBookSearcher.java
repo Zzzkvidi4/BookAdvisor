@@ -64,9 +64,11 @@ public class OzonBookSearcher extends BookSearcher {
                                     10000
                             );
                             isUploaded = true;
-                        } catch (Exception e) {
+                        } catch (Throwable t) {
                             isUploaded = false;
                             ++iteration;
+                            logger.warning("Exception occurred while waiting for uploading. Current iteration is " + iteration);
+                            logger.warning(t.getMessage());
                         }
                     }
                 }
@@ -75,9 +77,9 @@ public class OzonBookSearcher extends BookSearcher {
             books.forEach(b -> pushBook(toBook(b), storage));
             close();
         }
-        catch (Exception e) {
+        catch (Throwable t) {
             logger.severe("Exception occurred while searching for books");
-            logger.severe(e.toString());
+            logger.severe(t.toString());
         }
     }
 

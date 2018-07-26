@@ -60,9 +60,11 @@ public class LitresBookSearcher extends BookSearcher {
                                 10000
                         );
                         isUploaded = true;
-                    } catch (Exception e) {
+                    } catch (Throwable t) {
                         isUploaded = false;
                         ++iteration;
+                        logger.warning("Exception occurred while waiting for uploading. Current iteration is " + iteration);
+                        logger.warning(t.getMessage());
                     }
                 }
             }
@@ -71,9 +73,9 @@ public class LitresBookSearcher extends BookSearcher {
             books.forEach(book -> pushBook(toBook(book), storage));
             close();
         }
-        catch (Exception e) {
+        catch (Throwable t) {
             logger.severe("Exception occurred while retrieving books");
-            logger.severe(e.getMessage());
+            logger.severe(t.getMessage());
         }
     }
 

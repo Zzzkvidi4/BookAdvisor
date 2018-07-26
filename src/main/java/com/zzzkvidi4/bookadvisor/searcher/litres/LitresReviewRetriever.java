@@ -63,9 +63,9 @@ public class LitresReviewRetriever implements ReviewRetriever {
             reviews.forEach(review -> reviewsObjList.add(toReview(review)));
             close();
         }
-        catch (Exception e) {
+        catch (Throwable t) {
             logger.severe("Exception occurred while reviews retrieving");
-            logger.severe(e.getMessage());
+            logger.severe(t.getMessage());
         }
         return reviewsObjList;
     }
