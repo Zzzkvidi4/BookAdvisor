@@ -51,7 +51,7 @@ public class OzonBookSearcher extends BookSearcher {
                 pages = Integer.parseInt(divider.getText());
 
                 for (int i = 2; i < pages; ++i) {
-                    boolean isUploaded = false;
+                    /*boolean isUploaded = false;
                     int iteration = 0;
                     while (!isUploaded && (iteration < 10)) {
                         try {
@@ -69,6 +69,21 @@ public class OzonBookSearcher extends BookSearcher {
                             ++iteration;
                             logger.warning("Exception occurred while waiting for uploading. Current iteration is " + iteration);
                             logger.warning(t.getMessage());
+                        }
+                    }*/
+                    int resultListSize = $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS).size();
+                    while (resultListSize == $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS).size()) {
+                        try {
+                            $(OZON_FOOTER_CSS_CLASS).shouldBe(
+                                    uploaded(
+                                            $(OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS).findAll(OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS),
+                                            OZON_SEARCH_RESULT_CONTAINER_CSS_CLASS,
+                                            OZON_SEARCH_RESULT_ELEMENT_CSS_CLASS
+                                    )
+
+                            );
+                        } catch (Exception e) {
+                            logger.warning(e.getMessage());
                         }
                     }
                 }

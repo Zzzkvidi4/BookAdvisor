@@ -47,7 +47,7 @@ public class LitresBookSearcher extends BookSearcher {
                 } else if (loadMoreBtn.isDisplayed()) {
                     loadMoreBtn.click();
                 }
-                boolean isUploaded = false;
+                /*boolean isUploaded = false;
                 int iteration = 0;
                 while (!isUploaded && (iteration < 10)) {
                     try {
@@ -64,6 +64,20 @@ public class LitresBookSearcher extends BookSearcher {
                         isUploaded = false;
                         ++iteration;
                         logger.warning("Exception occurred while waiting for uploading. Current iteration is " + iteration);
+                        logger.warning(t.getMessage());
+                    }
+                }*/
+
+                int resultListSize = $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS).size();
+                while (resultListSize == $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS).size()){
+                    try {
+                        loader.shouldBe(uploaded(
+                                $(LITRES_SEARCH_RESULT_CONTAINER_ID).findAll(LITRES_SEARCH_RESULT_ELEMENT_CLASS),
+                                LITRES_SEARCH_RESULT_CONTAINER_ID,
+                                LITRES_SEARCH_RESULT_ELEMENT_CLASS
+                        ));
+                    }
+                    catch (Throwable t) {
                         logger.warning(t.getMessage());
                     }
                 }
