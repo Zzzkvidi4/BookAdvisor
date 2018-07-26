@@ -82,8 +82,8 @@ public class OzonBookSearcher extends BookSearcher {
                                     )
 
                             );
-                        } catch (Exception e) {
-                            logger.warning(e.getMessage());
+                        } catch (Throwable t) {
+                            logger.warning(t.getMessage());
                         }
                     }
                 }
