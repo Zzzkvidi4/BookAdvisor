@@ -19,4 +19,9 @@ public class ResponseContainer<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "ResponseContainer[isAuthenticated: " + isAuthenticated + ", data: " + (data != null ? data.toString() : "null") + "]";
+    }
 }
