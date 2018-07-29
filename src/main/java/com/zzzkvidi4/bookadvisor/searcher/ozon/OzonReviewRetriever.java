@@ -55,11 +55,13 @@ public class OzonReviewRetriever implements ReviewRetriever {
             ElementsCollection reviews = $(OZON_REVIEWS_BLOCK_CSS_CLASS).findAll(OZON_REVIEW_BLOCK_CSS_CLASS);
 
             reviews.forEach(review -> reviewsObjList.add(toReview(review)));
-            close();
         }
         catch (Throwable t) {
             logger.severe("Exception occurred while retrieving reviews");
             logger.severe(t.getMessage());
+        }
+        finally {
+            close();
         }
         return reviewsObjList;
     }
