@@ -14,7 +14,7 @@ public class RESTLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        logger.info("Using custom logout success handler: logout as " + authentication.getName());
+        logger.info("Using custom logout success handler: logout as " + (authentication != null ? authentication.getName() : "unknown"));
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 }
