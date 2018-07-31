@@ -10,7 +10,7 @@ const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full'},
   {path: 'index', component: BookListComponent},
   {path: 'reviews/:id', component: BookReviewsComponent},
-  {path: 'accounts', component: LoginComponent},
+  {path: 'registration', component: LoginComponent},
   {path: 'users/:id', component: UserComponent}
 ];
 

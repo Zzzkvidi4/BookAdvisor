@@ -4,6 +4,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../model/User";
 import {Review} from "../model/Review";
 import {Book} from "../model/Book";
+import {AppComponent} from '../app.component';
+import {LoginService} from '../service/loginner/login.service';
 
 @Component({
   selector: 'app-user',
@@ -28,6 +30,9 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.id = +this.route.snapshot.paramMap.get("id");
+    if (LoginService.userId != this.id) {
+      this.router.navigate(["index"]);
+    }
     this.userService.getUser(this.id).subscribe(
       resp => {
         console.log(resp);
@@ -37,7 +42,7 @@ export class UserComponent implements OnInit {
         this.user = resp.body.data;
       },
       error => {
-        this.router.navigate(["accounts"]);
+        AppComponent.loginEmitter.emit(true);
       }
     )
   }

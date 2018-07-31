@@ -7,6 +7,7 @@ import {Review} from "../model/Review";
 import {MatTableDataSource} from "@angular/material";
 import {LoginService} from "../service/loginner/login.service";
 import {UserService} from "../service/user-service/user.service";
+import {AppComponent} from '../app.component';
 
 @Component({
   selector: 'app-book-reviews',
@@ -69,13 +70,14 @@ export class BookReviewsComponent implements OnInit, AfterViewInit {
         this.isQuering = false;
         this.isError = true;
         this.isReady = true;
-        this.isSuccess = false;      }
+        this.isSuccess = false;
+      }
     )
   }
 
   addToFavourite() {
     if (!this.isAuthenticated) {
-      this.router.navigate(["/accounts"]);
+      AppComponent.loginEmitter.emit(true);
     } else {
       console.log(BookSearchService.selector);
       this.book.selector = BookSearchService.selector;

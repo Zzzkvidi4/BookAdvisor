@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {LoginService} from "./service/loginner/login.service";
 import {Router} from "@angular/router";
+import {MatDialog, MatDialogRef} from '@angular/material';
+import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,12 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  static loginEmitter: EventEmitter<boolean> = new EventEmitter();
+  appName = 'BookAdvisor';
+  isAuthorized: boolean;
+  userId: number;
+  username: string;
+
   ngOnInit(): void {
     console.log("Initialized app-root");
     LoginService.logged.subscribe((next) => {
@@ -32,15 +40,18 @@ export class AppComponent implements OnInit {
       }
     );
   }
-  title = 'app';
-  isAuthorized: boolean;
-  userId: number;
-  username: string;
 
   constructor(
     private loginService: LoginService,
-    private router: Router
-  ){}
+    private router: Router,
+    private dialog: MatDialog,
+  ){
+    AppComponent.loginEmitter.subscribe(
+      value => {
+        this.openLoginDialog();
+      }
+    );
+  }
 
   logout() {
     this.loginService.logout().subscribe(
@@ -53,5 +64,17 @@ export class AppComponent implements OnInit {
         console.log(error);
       }
     )
+  }
+
+  openLoginDialog() {
+    const dialogRef = this.dialog.open(LoginDialogComponent, {
+      height: '350px',
+    });
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        console.log(result);
+      }
+    );
   }
 }

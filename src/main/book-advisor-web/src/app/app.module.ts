@@ -10,7 +10,7 @@ import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatIconModule, MatInputModule, MatPaginatorModule,
   MatProgressSpinnerModule,
   MatTableModule,
-  MatDialogModule, MatDialog, MatTabsModule, MatFormFieldModule
+  MatDialogModule, MatDialog, MatTabsModule, MatFormFieldModule, MatSidenavModule, MatToolbarModule, MatListModule
 } from "@angular/material";
 import {BookSearchService} from "./service/book-searcher/book-search.service";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
@@ -23,6 +23,7 @@ import {LoginService} from "./service/loginner/login.service";
 import { UserComponent } from './user/user.component';
 import {UserService} from "./service/user-service/user.service";
 import { ReviewListComponent } from './review-list/review-list.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     LoginComponent,
     UserComponent,
     ReviewListComponent,
+    LoginDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +56,9 @@ import { ReviewListComponent } from './review-list/review-list.component';
     MatDialogModule,
     MatTabsModule,
     MatFormFieldModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
   ],
   providers: [
     HttpClient,
@@ -63,7 +68,10 @@ import { ReviewListComponent } from './review-list/review-list.component';
     LoginService,
     UserService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    LoginDialogComponent,
+  ]
 })
 export class AppModule {
 

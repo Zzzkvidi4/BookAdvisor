@@ -1,79 +1,46 @@
 <mat-card>
+  <mat-card-header>
+    <h3>Регистрация</h3>
+  </mat-card-header>
   <mat-card-content>
-    <mat-tab-group #matTabGroup>
-      <mat-tab label="Авторизация" class="example-container">
-        <p class="error" *ngIf="wrongCredentials">
-          Логин и/или пароль неверны!
-        </p>
-        <div>
-          <mat-form-field class="form-field-input">
-            <input matInput [(ngModel)]="login" placeholder="Логин" name="login-input" [formControl]="loginFormControl" [errorStateMatcher]="matcher">
-            <mat-error *ngIf="loginFormControl.hasError('required')">
-              Поле является обязательным!
-            </mat-error>
-            <mat-error *ngIf="!loginFormControl.hasError('required') && loginFormControl.hasError('minlength')">
-              Длина должна быть минимум 5 символов!
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field class="form-field-input">
-            <input type="password" matInput [(ngModel)]="password" placeholder="Пароль" name="password-input" [formControl]="passwordFormControl" [errorStateMatcher]="matcher">
-            <mat-error *ngIf="passwordFormControl.hasError('required')">
-              Поле является обязательным!
-            </mat-error>
-            <mat-error *ngIf="!passwordFormControl.hasError('required') && passwordFormControl.hasError('minlength')">
-              Длина должна быть минимум 5 символов!
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div>
-          <button mat-button (click)="onAuthorize()" cdkFocusInitial [disabled]="login.length < 5 || password.length < 5">Авторизация</button>
-        </div>
-      </mat-tab>
-      <mat-tab label="Регистрация">
-
-
-        <div>
-          <mat-form-field class="form-field-input">
-            <input matInput [(ngModel)]="login" placeholder="Логин" name="login-input" [formControl]="loginFormControl" [errorStateMatcher]="matcher" (change)="checkLoginUnique()">
-            <span class="error" *ngIf="nameIsNotUnique" matSuffix> Пользователь с таким логином уже существует!</span>
-            <mat-error *ngIf="loginFormControl.hasError('required')">
-              Поле является обязательным!
-            </mat-error>
-            <mat-error *ngIf="!loginFormControl.hasError('required') && loginFormControl.hasError('minlength')">
-              Длина должна быть минимум 5 символов!
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field  class="form-field-input">
-            <input type="password" matInput [(ngModel)]="password" placeholder="Пароль" name="password-input" [formControl]="passwordFormControl" (keyup)="checkPasswordEqual()">
-            <span class="error" *ngIf="passwordsAreNotEqual" matSuffix> Пароли не совпадают!</span>
-            <mat-error *ngIf="passwordFormControl.hasError('required')">
-              Поле является обязательным!
-            </mat-error>
-            <mat-error *ngIf="!passwordFormControl.hasError('required') && passwordFormControl.hasError('minlength')">
-              Длина должна быть минимум 5 символов!
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field  class="form-field-input">
-            <input type="password" matInput [(ngModel)]="passwordConfirm" placeholder="Подтверждение пароля" name="password-input" [formControl]="passwordConfirmFormControl" (keyup)="checkPasswordEqual()">
-            <mat-error *ngIf="passwordFormControl.hasError('required')">
-              Поле является обязательным!
-            </mat-error>
-            <mat-error *ngIf="!passwordFormControl.hasError('required') && passwordFormControl.hasError('minlength')">
-              Длина должна быть минимум 5 символов!
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div>
-          <button mat-button (click)="onRegister()" cdkFocusInitial [disabled]="nameIsNotUnique || passwordsAreNotEqual || login.length < 5 || password.length < 5">Регистрация</button>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
+    <div>
+      <mat-form-field class="form-field-input">
+        <input matInput [(ngModel)]="login" placeholder="Логин" name="login-input" [formControl]="loginFormControl" (change)="checkLoginUnique()">
+        <span class="error" *ngIf="nameIsNotUnique" matSuffix> Пользователь с таким логином уже существует!</span>
+        <mat-error *ngIf="loginFormControl.hasError('required')">
+          Поле является обязательным!
+        </mat-error>
+        <mat-error *ngIf="!loginFormControl.hasError('required') && loginFormControl.hasError('minlength')">
+          Длина должна быть минимум 5 символов!
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field  class="form-field-input">
+        <input type="password" matInput [(ngModel)]="password" placeholder="Пароль" name="password-input" [formControl]="passwordFormControl" (keyup)="checkPasswordEqual()">
+        <span class="error" *ngIf="passwordsAreNotEqual" matSuffix> Пароли не совпадают!</span>
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Поле является обязательным!
+        </mat-error>
+        <mat-error *ngIf="!passwordFormControl.hasError('required') && passwordFormControl.hasError('minlength')">
+          Длина должна быть минимум 5 символов!
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field  class="form-field-input">
+        <input type="password" matInput [(ngModel)]="passwordConfirm" placeholder="Подтверждение пароля" name="password-input" [formControl]="passwordConfirmFormControl" (keyup)="checkPasswordEqual()">
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Поле является обязательным!
+        </mat-error>
+        <mat-error *ngIf="!passwordFormControl.hasError('required') && passwordFormControl.hasError('minlength')">
+          Длина должна быть минимум 5 символов!
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button (click)="onRegister()" cdkFocusInitial [disabled]="nameIsNotUnique || passwordsAreNotEqual || loginFormControl.invalid || passwordFormControl.invalid || passwordConfirmFormControl.invalid">Регистрация</button>
+    </div>
   </mat-card-content>
 
 </mat-card>

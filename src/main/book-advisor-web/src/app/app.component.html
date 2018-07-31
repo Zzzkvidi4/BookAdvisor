@@ -1,7 +1,33 @@
-<nav>
-  <button routerLink="/index" mat-raised-button>BookAdvisor</button>
-  <button *ngIf="!isAuthorized" routerLink="/accounts" mat-raised-button>Регистрация/Авторизация</button>
-  <button *ngIf="isAuthorized" routerLink="/users/{{userId}}" mat-raised-button>{{username}}</button>
-  <button *ngIf="isAuthorized" (click)="logout()" mat-raised-button>Выйти</button>
+<!--<nav>
+
 </nav>
-<router-outlet></router-outlet>
+<router-outlet></router-outlet>-->
+
+
+<div class="main-container">
+  <mat-toolbar color="primary" class="toolbar-container">
+    <div class="title-container">
+      <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+      <h1 class="app-name">{{appName}}</h1>
+    </div>
+    <div class="actions-container">
+      <button mat-button (click)="openLoginDialog()" *ngIf="!isAuthorized"><mat-icon>input</mat-icon> Войти</button>
+      <button mat-button (click)="logout()" *ngIf="isAuthorized">Выйти</button>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #snav fixedTopGap="56" [mode]="'side'">
+      <mat-nav-list class="navigation-container">
+        <button routerLink="/index" mat-raised-button>BookAdvisor</button>
+        <button *ngIf="!isAuthorized" routerLink="/accounts" mat-raised-button>Регистрация</button>
+        <button *ngIf="isAuthorized" routerLink="/users/{{userId}}" mat-raised-button>{{username}}</button>
+        <button *ngIf="isAuthorized" (click)="logout()" mat-raised-button>Выйти</button>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content-container">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
